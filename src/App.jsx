@@ -1,127 +1,72 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
+import './index.css';
 
-function caesarCipher(text, shift, encode = true) {
-  let result = "";
-  if (!encode) shift = -shift;
-  
-  for (let i = 0; i < text.length; i++) {
-    let char = text[i];
-    if (char.match(/[a-z]/i)) {
-      let isLower = (char === char.toLowerCase());
-      let start = isLower ? 'a'.charCodeAt(0) : 'A'.charCodeAt(0);
-      // JS modulo bug fix: ((n % 26) + 26) % 26
-      let newChar = String.fromCharCode(((char.charCodeAt(0) - start + shift) % 26 + 26) % 26 + start);
-      result += newChar;
-    } else {
-      result += char;
-    }
-  }
-  return result;
-}
-
-function vigenereCipher(text, key, encode = true) {
-  let result = "";
-  key = key.toUpperCase();
-  let keyIndex = 0;
-  
-  for (let i = 0; i < text.length; i++) {
-    let char = text[i];
-    if (char.match(/[a-z]/i)) {
-      let shift = key.charCodeAt(keyIndex % key.length) - 'A'.charCodeAt(0);
-      if (!encode) shift = -shift;
-      
-      let isLower = (char === char.toLowerCase());
-      let start = isLower ? 'a'.charCodeAt(0) : 'A'.charCodeAt(0);
-      let newChar = String.fromCharCode(((char.charCodeAt(0) - start + shift) % 26 + 26) % 26 + start);
-      result += newChar;
-      keyIndex++;
-    } else {
-      result += char;
-    }
-  }
-  return result;
-}
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import MethodSelection from './pages/MethodSelection';
+import Workspace from './pages/Workspace';
+import Playground from './pages/Playground';
+import Library from './pages/Library';
+import Codebreaker from './pages/Codebreaker';
 
 function App() {
-  const [text, setText] = useState("");
-  const [mode, setMode] = useState("caesar");
-  const [action, setAction] = useState("encode");
-  const [shift, setShift] = useState(3);
-  const [vigenereKey, setVigenereKey] = useState("KEY");
-
-  let result = "";
-  if (text) {
-    if (mode === "caesar") {
-      result = caesarCipher(text, parseInt(shift) || 0, action === "encode");
-    } else if (mode === "vigenere" && vigenereKey) {
-      result = vigenereCipher(text, vigenereKey, action === "encode");
-    }
-  }
-
   return (
-    <div className="container">
-      <h1>Cipher Explorer</h1>
-      
-      <div className="form-row">
-        <div className="form-group">
-          <label>Cipher Mode:</label>
-          <select value={mode} onChange={(e) => setMode(e.target.value)}>
-            <option value="caesar">Caesar Cipher</option>
-            <option value="vigenere">Vigenère Cipher</option>
-          </select>
-        </div>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            
+            <Route path="encoder">
+              <Route index element={<MethodSelection />} />
+              <Route path=":methodId" element={<Workspace />} />
+            </Route>
 
-        <div className="form-group">
-          <label>Action:</label>
-          <select value={action} onChange={(e) => setAction(e.target.value)}>
-            <option value="encode">Encode</option>
-            <option value="decode">Decode</option>
-          </select>
-        </div>
-      </div>
+            <Route path="decoder">
+              <Route index element={<MethodSelection />} />
+              <Route path=":methodId" element={<Workspace />} />
+            </Route>
 
-      {mode === "caesar" ? (
-        <div className="form-group">
-          <label>Shift (Number):</label>
-          <input 
-            type="number" 
-            value={shift} 
-            onChange={(e) => setShift(e.target.value)} 
-          />
-        </div>
-      ) : (
-        <div className="form-group">
-          <label>Key (Letters only):</label>
-          <input 
-            type="text" 
-            value={vigenereKey} 
-            onChange={(e) => setVigenereKey(e.target.value.replace(/[^a-zA-Z]/g, ''))} 
-          />
-        </div>
-      )}
+            <Route path="codebreaker" element={<Codebreaker />} />
+            
+            <Route path="playground" element={<Playground />} />
+            
+            <Route path="library" element={<Library />} />
+            
+            {/* Fallback for RSA "COMING SOON" */}
+            <Route path="rsa" element={
+              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>RSA</h1>
+                <h2 style={{ color: 'var(--accent)', marginBottom: '2rem' }}>COMING SOON</h2>
+                <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+                  RSA is a public-key cryptosystem. Unlike the classical ciphers on this site which use the same key to encrypt and decrypt, RSA uses a public key to encrypt data, and a different, private key to decrypt it.
+                </p>
+                <div style={{ marginTop: '2rem' }}>
+                  <a href="/library" style={{ textDecoration: 'underline' }}>For more details, visit the Learning Library.</a>
+                </div>
+              </div>
+            } />
 
-      <div className="form-group">
-        <label>Input Text:</label>
-        <textarea 
-          value={text} 
-          onChange={(e) => setText(e.target.value)} 
-          placeholder="Type your message here..."
-          rows={4}
-        />
-      </div>
-
-      <div className="result-group">
-        <label>Result:</label>
-        <textarea 
-          value={result} 
-          readOnly 
-          rows={4}
-          placeholder="Output will appear here..."
-        />
-      </div>
-    </div>
-  )
+            {/* Fallback for Steganography "COMING SOON" */}
+            <Route path="steganography" element={
+              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>STEGANOGRAPHY</h1>
+                <h2 style={{ color: 'var(--accent)', marginBottom: '2rem' }}>COMING SOON</h2>
+                <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+                  Steganography is the practice of concealing a message within another medium (like an image or an audio file) so that no one even knows a secret message exists.
+                </p>
+                <div style={{ marginTop: '2rem' }}>
+                  <a href="/library" style={{ textDecoration: 'underline' }}>For more details, visit the Learning Library.</a>
+                </div>
+              </div>
+            } />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

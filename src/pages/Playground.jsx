@@ -140,15 +140,37 @@ export default function Playground() {
       </div>
 
       {/* Main Workspace */}
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold uppercase text-muted">ROOT INPUT</label>
-        <textarea 
-          className="input font-mono" 
-          rows={3} 
-          value={rootInput}
-          onChange={(e) => setRootInput(e.target.value)}
-          placeholder="Start your chain here..."
-        />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-bold uppercase text-muted">ROOT INPUT</label>
+          <textarea 
+            className="input font-mono" 
+            rows={4} 
+            value={rootInput}
+            onChange={(e) => setRootInput(e.target.value)}
+            placeholder="Start your chain here..."
+            style={{ resize: 'vertical' }}
+          />
+        </div>
+        
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <label className="text-xs font-bold uppercase text-accent">REAL-TIME FINAL OUTPUT</label>
+            {computedSteps.finalOutput && (
+              <button onClick={() => handleCopy(computedSteps.finalOutput, 'final')} className="btn-tertiary text-xs flex items-center gap-1" style={{ padding: 0 }}>
+                {copiedIndex === 'final' ? <><Check size={12}/> COPIED</> : <><Copy size={12}/> COPY</>}
+              </button>
+            )}
+          </div>
+          <textarea 
+            className="input font-mono" 
+            rows={4} 
+            value={computedSteps.finalOutput}
+            readOnly
+            placeholder="Final result will appear here..."
+            style={{ resize: 'vertical', backgroundColor: 'var(--bg-surface-raised)' }}
+          />
+        </div>
       </div>
 
       {/* Chain Container */}

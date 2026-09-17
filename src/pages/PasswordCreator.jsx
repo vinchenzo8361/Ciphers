@@ -105,16 +105,21 @@ export default function PasswordCreator() {
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
-                    <label className="text-sm font-bold">Password Length</label>
-                    <span className="font-mono text-sm text-muted">{length}</span>
+                    <label className="text-sm font-bold">Password Length (Max 100)</label>
                 </div>
                 <input 
-                    type="range" 
+                    type="number" 
+                    className="input"
                     min="4" 
-                    max="64" 
+                    max="100" 
                     value={length} 
-                    onChange={(e) => setLength(parseInt(e.target.value))}
-                    style={{ width: '100%', cursor: 'pointer' }}
+                    onChange={(e) => {
+                        let val = parseInt(e.target.value);
+                        if (isNaN(val)) val = 4;
+                        if (val > 100) val = 100;
+                        setLength(val);
+                    }}
+                    style={{ width: '100%' }}
                 />
             </div>
 

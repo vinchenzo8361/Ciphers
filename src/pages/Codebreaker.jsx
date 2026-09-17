@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { transform } from '../registry';
-import { Cpu } from 'lucide-react';
+import { Cpu, ChevronDown, ChevronUp } from 'lucide-react';
 
 const englishFreq = {
     'e': 12.7, 't': 9.0, 'a': 8.1, 'o': 7.5, 'i': 6.9, 'n': 6.7,
     's': 6.3, 'h': 6.0, 'r': 5.9, 'd': 4.2, 'l': 4.0, 'c': 2.7,
     'u': 2.7, 'm': 2.4, 'w': 2.3, 'f': 2.2, 'g': 2.0, 'y': 1.9,
     'p': 1.9, 'b': 1.4, 'v': 0.9, 'k': 0.7, 'x': 0.1, 'j': 0.1,
-    'q': 0.09, 'z': 0.07, ' ': 15.0 // spaces are very common
+    'q': 0.09, 'z': 0.07, ' ': 15.0 
 };
 
 function scoreText(text) {
@@ -21,72 +21,77 @@ function scoreText(text) {
             letterCount++;
         }
     }
-    // Normalize score based on text length to prevent longer garbage from winning
     return letterCount > 0 ? score / text.length : 0;
 }
 
 export default function Codebreaker() {
     const [input, setInput] = useState('');
-    const [result, setResult] = useState(null);
+    const [results, setResults] = useState([]);
+    const [showAllCaesar, setShowAllCaesar] = useState(false);
+    const [allCaesarShifts, setAllCaesarShifts] = useState([]);
 
     const handleCrack = () => {
         if (!input.trim()) return;
 
-        let bestScore = 0;
-        let bestMethod = '';
-        let bestText = '';
-        let methodologyText = '';
+        let potentialResults = [];
+        let caesarShifts = [];
 
-        // Helper to test a specific method
         const testMethod = (methodId, settings, name, methodology) => {
             const res = transform(methodId, input, settings, 'decode');
             if (res.success && res.output.trim().length > 0) {
                 const score = scoreText(res.output);
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMethod = name;
-                    bestText = res.output;
-                    methodologyText = methodology;
-                }
+                return { name, output: res.output, methodology, score, methodId, settings };
             }
+            return null;
         };
 
-        // 1. Try Encodings First (Base64, Hex, Binary, A1Z26)
+        // 1. Check Encodings (Binary, Hex, Base64, A1Z26)
         if (/^[01\s]+$/.test(input.trim())) {
-            testMethod('binary', {}, 'Binary Decoding', "The engine detected a pattern of 1s and 0s. It converted each 8-bit binary segment into its corresponding ASCII character.");
+            const res = testMethod('binary', {}, 'Binary Decoding', "Detected 1s and 0s. Converted 8-bit chunks to ASCII.");
+            if (res) potentialResults.push(res);
         }
         if (/^[0-9A-Fa-f\s]+$/.test(input.trim()) && !/^\d+$/.test(input.trim())) {
-            testMethod('hex', {}, 'Hexadecimal Decoding', "The engine detected valid base-16 (hexadecimal) characters and mapped them back to standard ASCII text.");
+            const res = testMethod('hex', {}, 'Hexadecimal Decoding', "Detected valid base-16. Mapped to ASCII text.");
+            if (res) potentialResults.push(res);
         }
         if (/^[\d\s-]+$/.test(input.trim())) {
-            testMethod('a1z26', {}, 'A1Z26 Cipher', "The text consisted purely of numbers. We assumed it was an A1Z26 substitution where 1=A, 2=B, 3=C, and converted them back to letters.");
+            const res = testMethod('a1z26', {}, 'A1Z26 Cipher', "Pure numbers detected. Assumed A=1, B=2 substitution.");
+            if (res) potentialResults.push(res);
         }
         if (/^[A-Za-z0-9+/=]+$/.test(input.trim())) {
-            testMethod('base64', {}, 'Base64 Decoding', "The engine identified the text as a Base64 string (commonly used to encode data over the internet) and decoded it.");
+            const res = testMethod('base64', {}, 'Base64 Decoding', "Decoded standard Base64 string.");
+            if (res && res.score > 0.5) potentialResults.push(res);
         }
 
-        // 2. Try Classical Substitutions
-        // Atbash
-        testMethod('atbash', {}, 'Atbash Cipher', "The engine assumed a mirrored alphabet (A=Z, B=Y, C=X) and flipped every letter.");
+        // 2. Classical
+        const atbashRes = testMethod('atbash', {}, 'Atbash Cipher', "Reversed the alphabet (A=Z, B=Y).");
+        if (atbashRes && atbashRes.score > 1.5) potentialResults.push(atbashRes);
         
-        // Caesar (Brute force 1-25)
+        let bestCaesar = null;
         for (let i = 1; i < 26; i++) {
-            testMethod('caesar', { shift: i }, `Caesar Shift (+${i})`, `The engine tested all 25 possible shifts. Shift +${i} produced a letter distribution matching standard English frequencies.`);
+            const res = testMethod('caesar', { shift: i }, `Caesar Shift (+${i})`, `Shifted letters back by ${i}. Scored highest on English frequency analysis.`);
+            if (res) {
+                caesarShifts.push(res);
+                if (!bestCaesar || res.score > bestCaesar.score) {
+                    bestCaesar = res;
+                }
+            }
+        }
+        
+        if (bestCaesar && bestCaesar.score > 1.5) {
+            potentialResults.push(bestCaesar);
         }
 
-        if (bestScore > 1.5) { // Threshold to prevent accepting pure garbage
-            setResult({
-                method: bestMethod,
-                text: bestText,
-                methodology: methodologyText
-            });
-        } else {
-            setResult({
-                method: "Unknown",
-                text: "Failed to crack.",
-                methodology: "The engine tried Caesar shifts, Atbash, Base64, Hex, Binary, and A1Z26, but none of the outputs mathematically resembled the English language."
-            });
-        }
+        setAllCaesarShifts(caesarShifts);
+
+        // Sort results by score descending
+        potentialResults.sort((a, b) => b.score - a.score);
+        
+        // Take top 3 unique methods (or all if very high score)
+        const topResults = potentialResults.filter(r => r.score > 1.5 || r.name.includes('Decoding'));
+        
+        setResults(topResults.length > 0 ? topResults.slice(0, 3) : []);
+        setShowAllCaesar(false);
     };
 
     return (
@@ -114,29 +119,79 @@ export default function Codebreaker() {
                 </div>
             </div>
 
-            {result && (
-                <div className="panel" style={{ borderLeft: result.method === "Unknown" ? '4px solid var(--error)' : '4px solid var(--accent)', marginTop: '1rem' }}>
-                    <h2 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '1rem' }}>
-                        {result.method === "Unknown" ? "ANALYSIS FAILED" : "ANALYSIS COMPLETE"}
+            {results && results.length > 0 && (
+                <div className="flex flex-col gap-6 mt-4">
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                        ANALYSIS COMPLETE
                     </h2>
                     
-                    <div className="text-sm text-muted mb-6" style={{ lineHeight: 1.6 }}>
-                        <strong style={{ color: 'var(--text-primary)' }}>Methodology:</strong><br />
-                        {result.methodology}
-                    </div>
+                    {results.map((res, idx) => (
+                        <div key={idx} className="panel" style={{ borderLeft: '4px solid var(--accent)', padding: '1.25rem' }}>
+                            <div className="flex justify-between items-center mb-2">
+                                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+                                    Guess {idx + 1}: {res.name}
+                                </h3>
+                                <span className="text-xs font-mono font-bold text-muted" style={{ background: 'var(--bg-base)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                                    CONFIDENCE SCORE: {(res.score * 10).toFixed(1)}
+                                </span>
+                            </div>
+                            
+                            <p className="text-sm text-muted mb-4" style={{ lineHeight: 1.6 }}>
+                                <strong style={{ color: 'var(--text-primary)' }}>Methodology:</strong> {res.methodology}
+                            </p>
 
-                    <div className="flex flex-col gap-2">
-                        <label className="text-xs font-bold uppercase text-muted">
-                            {result.method === "Unknown" ? "OUTPUT" : `DECODED RESULT (${result.method})`}
-                        </label>
-                        <textarea 
-                            className={`input font-mono ${result.method === "Unknown" ? 'input-error' : ''}`}
-                            rows={4} 
-                            value={result.text} 
-                            readOnly 
-                        />
-                    </div>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-xs font-bold uppercase text-muted">OUTPUT</label>
+                                <textarea 
+                                    className="input font-mono" 
+                                    rows={3} 
+                                    value={res.output} 
+                                    readOnly 
+                                    style={{ backgroundColor: 'var(--bg-surface-raised)' }}
+                                />
+                            </div>
+
+                            {/* Show All Shifts Button for Caesar */}
+                            {res.methodId === 'caesar' && (
+                                <div className="mt-4 border-t border-subtle pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                                    <button 
+                                        className="btn btn-secondary text-xs w-full justify-between" 
+                                        onClick={() => setShowAllCaesar(!showAllCaesar)}
+                                    >
+                                        <span>VIEW ALL 25 CAESAR SHIFT VARIATIONS</span>
+                                        {showAllCaesar ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                    </button>
+                                    
+                                    {showAllCaesar && (
+                                        <div className="mt-4 flex flex-col gap-2" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                                            {allCaesarShifts.map((shiftRes, sIdx) => (
+                                                <div key={sIdx} className="flex gap-2" style={{ fontSize: '0.85rem' }}>
+                                                    <div className="font-mono text-muted" style={{ width: '80px', flexShrink: 0 }}>
+                                                        Shift +{shiftRes.settings.shift}
+                                                    </div>
+                                                    <div className="font-mono" style={{ color: shiftRes.settings.shift === res.settings.shift ? 'var(--accent)' : 'var(--text-primary)'}}>
+                                                        {shiftRes.output}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
+            )}
+
+            {results && results.length === 0 && input.trim() !== '' && (
+                 <div className="panel" style={{ borderLeft: '4px solid var(--error)', marginTop: '1rem' }}>
+                    <h2 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                        ANALYSIS FAILED
+                    </h2>
+                    <p className="text-sm text-muted">
+                        The engine tried Caesar shifts, Atbash, Base64, Hex, Binary, and A1Z26, but none of the outputs mathematically resembled a known language or format.
+                    </p>
+                 </div>
             )}
         </div>
     );

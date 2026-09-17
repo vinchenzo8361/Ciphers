@@ -41,7 +41,7 @@ export const methods = [
         decode: caesarDecode,
         learning: {
             short: "Shifts each letter by a certain number of spaces down the alphabet.",
-            detailed: "Caesar cipher is one of the oldest encryption methods, named after Julius Caesar. It simply slides the alphabet. It is very easy to crack because there are only 25 possible shifts (keys).",
+            detailed: "The Caesar Cipher is one of the oldest known encryption techniques. It is a substitution cipher where each letter in the plaintext is shifted a certain number of places down the alphabet. For example, with a shift of 1, A would be replaced by B, B would become C, and so on. The method is named after Julius Caesar, who used it in his private correspondence.",
             example: `EXAMPLE:
 Input: HELLO (Shift +3)
 Output: KHOOR`
@@ -60,7 +60,7 @@ Output: KHOOR`
         decode: vigenereDecode,
         learning: {
             short: "Vigenère works somewhat like Caesar Cipher, but instead of moving every letter by the same amount, it uses a keyword to determine how far different letters should move.",
-            detailed: "This makes it a 'polyalphabetic substitution cipher'. If the letter key is 'SECRET', the first letter shifts by 'S', the second by 'E', etc. Our version also supports an isolated Number Key for shifting digits.",
+            detailed: "The Vigenère Cipher is a method of encrypting alphabetic text by using a series of interwoven Caesar ciphers, based on the letters of a keyword. It is a form of polyalphabetic substitution. For centuries, it was known as 'le chiffre indéchiffrable' (the indecipherable cipher) until Friedrich Kasiski published a method to break it in 1863.",
             example: `EXAMPLE:
 Input: HELLO (Letter Key: KEY)
 Output: RIJVS`
@@ -79,7 +79,7 @@ Output: RIJVS`
         decode: rot13,
         learning: {
             short: "Shifts letters by exactly 13 places. Because the alphabet has 26 letters, doing it twice gets you back to the start.",
-            detailed: "ROT13 is often used in online forums as a simple means of hiding spoilers, punchlines, puzzle solutions, and offensive materials from the casual glance.",
+            detailed: "ROT13 (Rotate by 13 places) is a simple letter substitution cipher that replaces a letter with the 13th letter after it in the alphabet. Because there are 26 letters (2x13) in the basic Latin alphabet, ROT13 is its own inverse; that is, to undo ROT13, the same algorithm is applied, so the same action can be used for encoding and decoding.",
             example: `EXAMPLE:
 Input: HELLO
 Output: URYYB`
@@ -98,7 +98,7 @@ Output: URYYB`
         decode: atbash,
         learning: {
             short: "Reverses the alphabet so A=Z, B=Y, C=X, etc.",
-            detailed: "Originally developed for the Hebrew alphabet. It is a specific type of monoalphabetic substitution cipher where the key is just the alphabet in reverse.",
+            detailed: "Atbash is a monoalphabetic substitution cipher originally used to encrypt the Hebrew alphabet. It works by substituting the first letter of an alphabet for the last letter, the second letter for the second to last letter, and so on (A becomes Z, B becomes Y). It is trivially easy to break.",
             example: `EXAMPLE:
 Input: HELLO
 Output: SVOOL`
@@ -194,7 +194,7 @@ Output: 48 65 6c 6c 6f`
         decode: base64Decode,
         learning: {
             short: "Base64 is a way to encode data so it safely travels across networks.",
-            detailed: "Base64 is encoding, not encryption. It is often used for email attachments or embedding images in HTML. It usually ends with one or two '=' padding characters.",
+            detailed: "Base64 is a binary-to-text encoding scheme that represents binary data (such as images, files, or encrypted text) in an ASCII string format by translating it into a radix-64 representation. It is heavily used to safely transport data across the internet (like in email attachments or JSON Web Tokens) without special characters breaking the protocol.",
             example: `EXAMPLE:
 Input: Hello
 Output: SGVsbG8=`
@@ -347,7 +347,7 @@ Output: L337`
         decode: hashingDecode,
         learning: {
             short: "A one-way mathematical function that creates a unique fingerprint of the data.",
-            detailed: "Hashing is NOT encryption. You cannot decode a hash back into the original text. It is used to verify data integrity or securely store passwords.",
+            detailed: "MD5 (Message-Digest Algorithm 5) is a widely used cryptographic hash function that produces a 128-bit (16-byte) hash value. Although MD5 was initially designed to be used as a cryptographic hash function, it has been found to suffer from extensive vulnerabilities. It is no longer considered secure for passwords, but is still used for basic checksums to verify file integrity.",
             example: `EXAMPLE:
 Input: Hello
 Output: 8b1a9953c4611296a827abf8c47804d7`
@@ -366,7 +366,7 @@ Output: 8b1a9953c4611296a827abf8c47804d7`
         decode: hashingDecode,
         learning: {
             short: "A modern, highly secure one-way hashing algorithm.",
-            detailed: "Used by Bitcoin and SSL certificates. Even a tiny change to the input completely changes the output hash. Like MD5, it cannot be reversed.",
+            detailed: "SHA-256 (Secure Hash Algorithm 256-bit) is a cryptographic hash function that produces a 256-bit signature for a text. It belongs to the SHA-2 family, designed by the NSA. It is highly secure and is used in major protocols including TLS, SSL, SSH, and Bitcoin cryptocurrency. Any slight change to the original text results in a completely different, unpredictable hash.",
             example: `EXAMPLE:
 Input: Hello
 Output: 185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969`

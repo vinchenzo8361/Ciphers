@@ -17,29 +17,44 @@ export default function Library() {
   }, {});
 
   return (
-    <div className="flex gap-8" style={{ alignItems: 'flex-start' }}>
+    <div className="flex gap-8" style={{ alignItems: 'flex-start', position: 'relative' }}>
       
       {/* Sidebar Navigation */}
-      <div style={{ width: '220px', position: 'sticky', top: '2rem', flexShrink: 0, paddingRight: '1rem', borderRight: '1px solid var(--border-subtle)' }}>
-        <h2 style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '1px' }}>
-          INDEX
+      <div style={{ 
+        width: '240px', 
+        position: 'sticky', 
+        top: '2rem', 
+        flexShrink: 0, 
+        padding: '1.5rem', 
+        backgroundColor: 'var(--bg-surface)', 
+        borderRadius: '8px', 
+        border: '1px solid var(--border-subtle)',
+        maxHeight: 'calc(100vh - 4rem)',
+        overflowY: 'auto'
+      }}>
+        <h2 style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '1.5rem', letterSpacing: '1px' }}>
+          CONTENTS INDEX
         </h2>
         {Object.entries(groupedMethods).map(([category, catMethods]) => (
           <div key={category} style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <h3 style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               {category}
             </h3>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               {catMethods.map(m => (
                 <li key={m.id}>
                   <a 
                     href={`#${m.id}`} 
                     style={{ 
+                      display: 'block',
+                      padding: '0.4rem 0.75rem',
+                      borderRadius: '4px',
+                      backgroundColor: expandedMethod === m.id ? 'var(--accent-muted)' : 'transparent',
                       color: expandedMethod === m.id ? 'var(--accent)' : 'var(--text-primary)', 
                       fontSize: '0.85rem',
                       fontWeight: expandedMethod === m.id ? '600' : '400',
                       textDecoration: 'none',
-                      transition: 'color 0.15s'
+                      transition: 'all 0.15s ease'
                     }}
                     onClick={() => setExpandedMethod(m.id)}
                   >

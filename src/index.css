@@ -21,15 +21,15 @@
 
 [data-theme='dark'] {
   /* Dark Theme */
-  --bg-base: #0d1117;
-  --bg-surface: #161b22;
-  --bg-surface-raised: #21262d;
-  --border-subtle: #30363d;
-  --border-strong: #484f58;
-  --text-primary: #c9d1d9;
-  --text-secondary: #8b949e;
-  --accent: #4493f8;
-  --accent-muted: rgba(68, 147, 248, 0.15);
+  --bg-base: #1c212a;
+  --bg-surface: #262c36;
+  --bg-surface-raised: #343c4a;
+  --border-subtle: #454f5f;
+  --border-strong: #59667a;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent: #5e9cf9;
+  --accent-muted: rgba(94, 156, 249, 0.15);
   --error: #ff7b72;
   --error-bg: rgba(255, 123, 114, 0.1);
   --success: #3fb950;

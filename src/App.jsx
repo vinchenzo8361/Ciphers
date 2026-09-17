@@ -37,28 +37,32 @@ function App() {
             
             {/* Fallback for RSA "COMING SOON" */}
             <Route path="rsa" element={
-              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>RSA</h1>
-                <h2 style={{ color: 'var(--accent)', marginBottom: '2rem' }}>COMING SOON</h2>
-                <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                  RSA is a public-key cryptosystem. Unlike the classical ciphers on this site which use the same key to encrypt and decrypt, RSA uses a public key to encrypt data, and a different, private key to decrypt it.
-                </p>
-                <div style={{ marginTop: '2rem' }}>
-                  <a href="/library" style={{ textDecoration: 'underline' }}>For more details, visit the Learning Library.</a>
+              <div className="flex flex-col gap-6" style={{ maxWidth: '600px', margin: '4rem auto' }}>
+                <div>
+                  <h1 style={{ fontSize: '2rem', fontWeight: '700', letterSpacing: '-1px', marginBottom: '0.5rem' }}>RSA CRYPTOGRAPHY</h1>
+                  <span className="font-mono text-xs font-bold" style={{ color: 'var(--accent)', background: 'var(--accent-muted)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>STATUS: IN DEVELOPMENT</span>
+                </div>
+                <div className="panel">
+                  <p className="text-muted" style={{ lineHeight: 1.6, marginBottom: '1.5rem', fontSize: '0.95rem' }}>
+                    RSA is a public-key cryptosystem. Unlike the classical ciphers on this site which use the same key to encrypt and decrypt, RSA uses a public key to encrypt data, and a different, private key to decrypt it.
+                  </p>
+                  <a href="/library" className="btn btn-secondary text-xs">VIEW IN LIBRARY</a>
                 </div>
               </div>
             } />
 
             {/* Fallback for Steganography "COMING SOON" */}
             <Route path="steganography" element={
-              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>STEGANOGRAPHY</h1>
-                <h2 style={{ color: 'var(--accent)', marginBottom: '2rem' }}>COMING SOON</h2>
-                <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
-                  Steganography is the practice of concealing a message within another medium (like an image or an audio file) so that no one even knows a secret message exists.
-                </p>
-                <div style={{ marginTop: '2rem' }}>
-                  <a href="/library" style={{ textDecoration: 'underline' }}>For more details, visit the Learning Library.</a>
+              <div className="flex flex-col gap-6" style={{ maxWidth: '600px', margin: '4rem auto' }}>
+                <div>
+                  <h1 style={{ fontSize: '2rem', fontWeight: '700', letterSpacing: '-1px', marginBottom: '0.5rem' }}>STEGANOGRAPHY</h1>
+                  <span className="font-mono text-xs font-bold" style={{ color: 'var(--accent)', background: 'var(--accent-muted)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>STATUS: IN DEVELOPMENT</span>
+                </div>
+                <div className="panel">
+                  <p className="text-muted" style={{ lineHeight: 1.6, marginBottom: '1.5rem', fontSize: '0.95rem' }}>
+                    Steganography is the practice of concealing a message within another medium (like an image or an audio file) so that no one even knows a secret message exists.
+                  </p>
+                  <a href="/library" className="btn btn-secondary text-xs">VIEW IN LIBRARY</a>
                 </div>
               </div>
             } />

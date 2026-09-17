@@ -8,19 +8,19 @@ export default function Layout() {
   const location = useLocation();
 
   const navLinks = [
-    { name: 'Home', path: '/' },
     { name: 'Encoder', path: '/encoder' },
     { name: 'Decoder', path: '/decoder' },
     { name: 'Playground', path: '/playground' },
-    { name: 'Learning Library', path: '/library' }
+    { name: 'Library', path: '/library' },
+    { name: 'Codebreaker', path: '/codebreaker' }
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div className="flex flex-col" style={{ minHeight: '100vh' }}>
       <header style={{ 
-        borderBottom: '1px solid var(--border)', 
-        backgroundColor: 'var(--bg-secondary)',
-        padding: '1rem 2rem'
+        borderBottom: '1px solid var(--border-subtle)', 
+        backgroundColor: 'var(--bg-surface)',
+        padding: '0.75rem 2rem'
       }}>
         <div style={{ 
           maxWidth: '1200px', 
@@ -29,9 +29,9 @@ export default function Layout() {
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '1.25rem' }}>
-            <Lock size={24} color="var(--accent)" />
-            CIPHER LAB
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)', fontWeight: '600', letterSpacing: '-0.5px' }}>
+            <Lock size={18} color="var(--accent)" />
+            <span>CIPHER LAB</span>
           </Link>
           
           <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
@@ -40,9 +40,10 @@ export default function Layout() {
                 key={link.name} 
                 to={link.path}
                 style={{ 
-                  color: location.pathname === link.path || (location.pathname.startsWith(link.path) && link.path !== '/') ? 'var(--accent)' : 'var(--text-secondary)',
+                  color: location.pathname.startsWith(link.path) ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  fontSize: '0.85rem',
                   fontWeight: '500',
-                  transition: 'color 0.2s'
+                  transition: 'color 0.15s'
                 }}
               >
                 {link.name}
@@ -50,19 +51,10 @@ export default function Layout() {
             ))}
             <button 
               onClick={toggleTheme} 
-              style={{ 
-                background: 'none', 
-                border: 'none', 
-                color: 'var(--text-secondary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0.5rem',
-                borderRadius: '50%'
-              }}
+              className="btn-tertiary"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
           </nav>
         </div>
@@ -73,13 +65,14 @@ export default function Layout() {
       </main>
       
       <footer style={{ 
-        borderTop: '1px solid var(--border)', 
-        padding: '2rem', 
+        borderTop: '1px solid var(--border-subtle)', 
+        padding: '1.5rem', 
         textAlign: 'center',
         color: 'var(--text-secondary)',
-        fontSize: '0.875rem'
+        fontSize: '0.75rem',
+        fontFamily: 'var(--font-mono)'
       }}>
-        Cipher Lab Sandbox &copy; {new Date().getFullYear()}
+        cipher-lab // {new Date().getFullYear()}
       </footer>
     </div>
   );

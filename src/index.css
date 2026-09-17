@@ -1,37 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
   /* Light Theme */
-  --bg-primary: #f8f9fa;
-  --bg-secondary: #ffffff;
-  --text-primary: #212529;
-  --text-secondary: #495057;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --border: #dee2e6;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --input-bg: #ffffff;
-  --input-border: #ced4da;
-  --error-bg: #fee2e2;
-  --error-text: #dc2626;
-  --success-bg: #dcfce7;
-  --success-text: #16a34a;
+  --bg-base: #f6f8fa;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #f3f4f6;
+  --border-subtle: #eaecef;
+  --border-strong: #d0d7de;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --accent: #0969da;
+  --accent-muted: rgba(9, 105, 218, 0.1);
+  --error: #cf222e;
+  --error-bg: rgba(207, 34, 46, 0.1);
+  --success: #1a7f37;
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
 [data-theme='dark'] {
   /* Dark Theme */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --accent: #3b82f6;
-  --accent-hover: #60a5fa;
-  --border: #334155;
-  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --input-bg: #0f172a;
-  --input-border: #475569;
-  --error-bg: #7f1d1d;
-  --error-text: #fca5a5;
-  --success-bg: #14532d;
-  --success-text: #86efac;
+  --bg-base: #0d1117;
+  --bg-surface: #161b22;
+  --bg-surface-raised: #21262d;
+  --border-subtle: #30363d;
+  --border-strong: #484f58;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent: #4493f8;
+  --accent-muted: rgba(68, 147, 248, 0.15);
+  --error: #ff7b72;
+  --error-bg: rgba(255, 123, 114, 0.1);
+  --success: #3fb950;
 }
 
 * {
@@ -41,16 +42,23 @@
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-primary);
+  font-family: var(--font-sans);
+  background-color: var(--bg-base);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: var(--accent);
   text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+a:hover {
+  opacity: 0.8;
 }
 
 button {
@@ -58,66 +66,131 @@ button {
   font-family: inherit;
 }
 
-/* Base utility classes */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}
+
+/* Base Layout */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
+/* Technical Panels */
+.panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
+.panel-interactive:hover {
+  border-color: var(--border-strong);
 }
 
+/* Inputs & Textareas */
 .input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--input-bg);
+  padding: 0.75rem;
+  background-color: var(--bg-base);
   color: var(--text-primary);
-  border: 1px solid var(--input-border);
-  border-radius: 0.5rem;
-  font-family: monospace;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
+.input[readonly] {
+  background-color: var(--bg-surface-raised);
+  border-color: var(--border-subtle);
+}
+
+.input-error {
+  border-color: var(--error);
+  color: var(--error);
+  background-color: var(--error-bg);
+}
+
+/* Buttons */
 .btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  background-color: var(--accent);
-  color: white;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
 }
 
-.btn:hover {
-  background-color: var(--accent-hover);
+.btn-primary {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  border: 1px solid var(--border);
+  background-color: var(--bg-surface-raised);
+  border-color: var(--border-strong);
   color: var(--text-primary);
 }
 
-.btn-secondary:hover {
-  background-color: var(--bg-secondary);
-  border-color: var(--accent);
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--bg-surface);
+  border-color: var(--text-secondary);
 }
+
+.btn-tertiary {
+  background-color: transparent;
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-tertiary:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+/* Utilities */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+
+.text-sm { font-size: 0.85rem; }
+.text-xs { font-size: 0.75rem; }
+.uppercase { text-transform: uppercase; }
+.font-bold { font-weight: 600; }

@@ -6,7 +6,8 @@ export default function MethodSelection() {
   const location = useLocation();
   const isEncoder = location.pathname.startsWith('/encoder');
   const basePath = isEncoder ? '/encoder' : '/decoder';
-  const title = isEncoder ? 'Select Encoder Method' : 'Select Decoder Method';
+  const title = isEncoder ? 'ENCODER' : 'DECODER';
+  const subtitle = isEncoder ? 'Choose a method to transform your text.' : 'Turn encoded text back into readable text.';
 
   // Group methods by category
   const groupedMethods = methods.reduce((acc, m) => {
@@ -19,61 +20,61 @@ export default function MethodSelection() {
     const max = 10;
     const filled = Math.min(max, Math.max(1, score));
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'monospace' }}>
-        <span style={{ letterSpacing: '-2px' }}>
+      <div className="flex items-center gap-1 font-mono text-xs">
+        <span style={{ letterSpacing: '-1px', color: 'var(--text-primary)' }}>
           {'█'.repeat(filled)}
-          <span style={{ opacity: 0.3 }}>{'█'.repeat(max - filled)}</span>
+          <span style={{ color: 'var(--border-strong)' }}>{'█'.repeat(max - filled)}</span>
         </span>
-        <span>{filled}/10</span>
+        <span style={{ marginLeft: '4px', color: 'var(--text-secondary)' }}>{filled}/10</span>
       </div>
     );
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div>
-        <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{title}</h1>
-        <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border)', display: 'inline-block' }}>
-          <h3 style={{ fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>CHARACTER SUPPORT</h3>
-          <p style={{ fontSize: '0.85rem' }}>✓ = transforms this type | ✕ = ignores/passes through</p>
+    <div className="flex flex-col gap-8">
+      <div className="mb-4">
+        <h1 style={{ fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-1px', marginBottom: '0.25rem' }}>{title}</h1>
+        <p className="text-muted mb-4">{subtitle}</p>
+        
+        <div style={{ display: 'inline-flex', background: 'var(--bg-surface-raised)', padding: '0.5rem 0.75rem', borderRadius: '4px', border: '1px solid var(--border-subtle)' }}>
+          <span className="font-mono text-xs text-muted">
+            <strong style={{ color: 'var(--text-primary)' }}>SUPPORT:</strong> ✓ = transforms this type | ✕ = ignores/passes through
+          </span>
         </div>
       </div>
 
       {Object.entries(groupedMethods).map(([category, catMethods]) => (
-        <div key={category} style={{ marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+        <div key={category}>
+          <h2 style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '1rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
             {category}
           </h2>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
             gap: '1rem'
           }}>
             {catMethods.map(method => (
               <Link 
                 key={method.id} 
                 to={`${basePath}/${method.id}`} 
-                className="card"
-                style={{ display: 'flex', flexDirection: 'column', gap: '1rem', color: 'inherit' }}
+                className="panel panel-interactive flex flex-col gap-4"
+                style={{ color: 'inherit', textDecoration: 'none', padding: '1rem' }}
               >
                 <div>
-                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{method.name}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{method.description}</p>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '0.25rem', letterSpacing: '-0.25px' }}>{method.name.toUpperCase()}</h3>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{method.description}</p>
                 </div>
                 
-                <div style={{ marginTop: 'auto' }}>
-                  <div style={{ fontSize: '0.8rem', marginBottom: '0.5rem' }}>
-                    <strong>Difficulty to crack:</strong>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.65rem', fontWeight: '700', color: 'var(--text-secondary)', marginBottom: '0.15rem' }}>CRACK DIFFICULTY</div>
                     {renderDifficulty(method.difficulty)}
                   </div>
                   
-                  <div style={{ fontSize: '0.8rem' }}>
-                    <strong>Support:</strong>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                      <span>Letters {method.support.letters ? '✓' : '✕'}</span>
-                      <span>Numbers {method.support.numbers ? '✓' : '✕'}</span>
-                      <span>Symbols {method.support.symbols ? '✓' : '✕'}</span>
-                    </div>
+                  <div style={{ fontSize: '0.7rem', display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                    <span>L {method.support.letters ? '✓' : '✕'}</span>
+                    <span>N {method.support.numbers ? '✓' : '✕'}</span>
+                    <span>S {method.support.symbols ? '✓' : '✕'}</span>
                   </div>
                 </div>
               </Link>

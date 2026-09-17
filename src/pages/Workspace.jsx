@@ -17,7 +17,6 @@ export default function Workspace() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Reset state when method changes
     setInput('');
     setSettings(method.defaultSettings || {});
     setOutput('');
@@ -25,7 +24,6 @@ export default function Workspace() {
   }, [methodId, method]);
 
   useEffect(() => {
-    // Recalculate output whenever input or settings change
     if (!input) {
       setOutput('');
       setError(null);
@@ -47,7 +45,7 @@ export default function Workspace() {
   };
 
   const handleSwap = () => {
-    if (output) {
+    if (output && !error) {
       setInput(output);
     }
   };
@@ -56,17 +54,18 @@ export default function Workspace() {
     if (Object.keys(settings).length === 0) return null;
 
     return (
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
+      <div className="flex gap-4 items-center" style={{ padding: '0.75rem 0' }}>
         {Object.keys(settings).map(key => {
           let label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
           return (
-            <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1, minWidth: '150px' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>{label}</label>
+            <div key={key} className="flex items-center gap-2">
+              <label className="text-xs font-bold text-muted uppercase">{label}</label>
               <input 
                 className="input"
                 type={typeof method.defaultSettings[key] === 'number' ? 'number' : 'text'}
                 value={settings[key]}
                 onChange={(e) => handleSettingChange(key, e.target.value)}
+                style={{ width: '120px', padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
               />
             </div>
           );
@@ -76,68 +75,66 @@ export default function Workspace() {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', textTransform: 'uppercase' }}>{method.name}</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{method.learning?.short}</p>
+    <div className="flex flex-col gap-6" style={{ maxWidth: '800px', margin: '0 auto' }}>
+      
+      {/* Header */}
+      <div style={{ marginBottom: '1rem' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: '700', letterSpacing: '-1px', marginBottom: '0.5rem' }}>
+          {method.name.toUpperCase()}
+        </h1>
+        <p className="text-muted" style={{ fontSize: '0.95rem' }}>{method.learning?.short}</p>
         
-        <div style={{ display: 'inline-block', background: 'var(--bg-secondary)', padding: '0.5rem 1rem', borderRadius: '2rem', fontSize: '0.85rem', border: '1px solid var(--border)' }}>
-          <span style={{ opacity: 0.7 }}>Difficulty:</span> {method.difficulty}/10
-        </div>
-        
-        <div style={{ marginTop: '1rem' }}>
-          <Link to={`/library#${method.id}`} style={{ fontSize: '0.9rem', textDecoration: 'underline' }}>
-            Check the Learning Library for more details.
+        <div className="flex items-center gap-4 mt-4">
+          <div className="font-mono text-xs text-muted" style={{ background: 'var(--bg-surface-raised)', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>
+            DIFFICULTY: {method.difficulty}/10
+          </div>
+          <Link to={`/library#${method.id}`} className="text-xs font-bold" style={{ textDecoration: 'underline' }}>
+            LIBRARY REFERENCE
           </Link>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontWeight: 'bold' }}>INPUT</label>
-          <textarea 
-            className="input" 
-            rows={5} 
-            value={input} 
-            onChange={(e) => setInput(e.target.value)} 
-            placeholder="Type your message here..."
-          />
-        </div>
-
-        {Object.keys(settings).length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontWeight: 'bold' }}>METHOD SETTINGS</label>
-            {renderSettings()}
-          </div>
-        )}
-
-        <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
-          <button 
-            className="btn btn-secondary" 
-            onClick={handleSwap} 
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem' }}
-            disabled={!output}
-          >
-            <ArrowDownUp size={16} /> SWAP
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontWeight: 'bold' }}>OUTPUT</label>
-          <textarea 
-            className="input" 
-            rows={5} 
-            value={error || output} 
-            readOnly 
-            style={{ 
-              backgroundColor: error ? 'var(--error-bg)' : 'var(--bg-secondary)',
-              color: error ? 'var(--error-text)' : 'inherit',
-              borderColor: error ? 'var(--error-text)' : 'var(--input-border)'
-            }}
-            placeholder={error ? "" : "Result will appear here..."}
-          />
-        </div>
+      {/* Main Workspace */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-bold uppercase text-muted">INPUT</label>
+        <textarea 
+          className={`input ${mode === 'decode' ? 'font-mono' : ''}`}
+          rows={6} 
+          value={input} 
+          onChange={(e) => setInput(e.target.value)} 
+          placeholder="Type or paste text here..."
+          style={{ resize: 'vertical' }}
+        />
       </div>
+
+      {/* Settings Bar between Input and Output */}
+      <div className="flex items-center justify-between" style={{ borderTop: '1px dashed var(--border-subtle)', borderBottom: '1px dashed var(--border-subtle)' }}>
+        <div style={{ flex: 1 }}>
+          {renderSettings()}
+        </div>
+        
+        <button 
+          className="btn btn-tertiary font-mono text-xs"
+          onClick={handleSwap} 
+          disabled={!output || error}
+          title="Swap output to input"
+        >
+          <ArrowDownUp size={14} /> SWAP
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-bold uppercase text-muted">OUTPUT</label>
+        <textarea 
+          className={`input ${error ? 'input-error' : ''} ${mode === 'encode' ? 'font-mono' : ''}`}
+          rows={6} 
+          value={error || output} 
+          readOnly 
+          placeholder={error ? "" : "Result will appear here..."}
+          style={{ resize: 'vertical' }}
+        />
+      </div>
+
     </div>
   );
 }

@@ -10,6 +10,8 @@ import Workspace from './pages/Workspace';
 import Playground from './pages/Playground';
 import Library from './pages/Library';
 import Codebreaker from './pages/Codebreaker';
+import PasswordCreator from './pages/PasswordCreator';
+import CodebreakingGuide from './pages/CodebreakingGuide';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             </Route>
 
             <Route path="codebreaker" element={<Codebreaker />} />
+            <Route path="password-creator" element={<PasswordCreator />} />
+            <Route path="codebreaking-guide" element={<CodebreakingGuide />} />
             
             <Route path="playground" element={<Playground />} />
             

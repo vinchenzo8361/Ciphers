@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation, Link, Navigate } from 'react-router-dom';
-import { ArrowDownUp } from 'lucide-react';
+import { useParams, useLocation, useNavigate, Link, Navigate } from 'react-router-dom';
+import { ArrowDownUp, Unlock } from 'lucide-react';
 import { methods, transform } from '../registry';
 
 export default function Workspace() {
   const { methodId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const mode = location.pathname.startsWith('/encoder') ? 'encode' : 'decode';
   
   const method = methods.find(m => m.id === methodId);
   if (!method) return <Navigate to={mode === 'encode' ? '/encoder' : '/decoder'} />;
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(location.state?.initialInput || '');
   const [settings, setSettings] = useState(method.defaultSettings || {});
   const [output, setOutput] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setInput('');
+    // Only reset if we didn't come in with initial input from a cross-navigation
+    if (!location.state?.initialInput) {
+      setInput('');
+    }
     setSettings(method.defaultSettings || {});
     setOutput('');
     setError(null);
-  }, [methodId, method]);
+  }, [methodId, method, location.state]);
 
   useEffect(() => {
     if (!input) {
@@ -113,14 +117,25 @@ export default function Workspace() {
           {renderSettings()}
         </div>
         
-        <button 
-          className="btn btn-tertiary font-mono text-xs"
-          onClick={handleSwap} 
-          disabled={!output || error}
-          title="Swap output to input"
-        >
-          <ArrowDownUp size={14} /> SWAP
-        </button>
+        <div className="flex gap-2">
+          {mode === 'encode' && output && !error && method.isSelfInverse === false && (
+            <button 
+              className="btn btn-secondary font-mono text-xs"
+              onClick={() => navigate(`/decoder/${method.id}`, { state: { initialInput: output } })}
+              title="Take this output and go to Decoder mode"
+            >
+              <Unlock size={14} /> DECODE
+            </button>
+          )}
+          <button 
+            className="btn btn-tertiary font-mono text-xs"
+            onClick={handleSwap} 
+            disabled={!output || error}
+            title="Swap output to input"
+          >
+            <ArrowDownUp size={14} /> SWAP
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">

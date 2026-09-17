@@ -40,6 +40,20 @@ export default function Home() {
       active: true
     },
     {
+      title: 'CODEBREAKING GUIDE',
+      description: 'Learn simple techniques to crack codes.',
+      icon: <BookOpen size={24} />,
+      path: '/codebreaking-guide',
+      active: true
+    },
+    {
+      title: 'PASSWORD CREATOR',
+      description: 'Generate highly secure randomized passwords.',
+      icon: <Lock size={24} />,
+      path: '/password-creator',
+      active: true
+    },
+    {
       title: 'RSA',
       description: 'COMING SOON',
       icon: <ShieldAlert size={24} />,

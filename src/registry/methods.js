@@ -41,7 +41,10 @@ export const methods = [
         decode: caesarDecode,
         learning: {
             short: "Shifts each letter by a certain number of spaces down the alphabet.",
-            detailed: "Caesar cipher is one of the oldest encryption methods, named after Julius Caesar. It simply slides the alphabet. It is very easy to crack because there are only 25 possible shifts (keys)."
+            detailed: "Caesar cipher is one of the oldest encryption methods, named after Julius Caesar. It simply slides the alphabet. It is very easy to crack because there are only 25 possible shifts (keys).",
+            example: `EXAMPLE:
+Input: HELLO (Shift +3)
+Output: KHOOR`
         }
     },
     {
@@ -57,7 +60,10 @@ export const methods = [
         decode: vigenereDecode,
         learning: {
             short: "Vigenère works somewhat like Caesar Cipher, but instead of moving every letter by the same amount, it uses a keyword to determine how far different letters should move.",
-            detailed: "This makes it a 'polyalphabetic substitution cipher'. If the letter key is 'SECRET', the first letter shifts by 'S', the second by 'E', etc. Our version also supports an isolated Number Key for shifting digits."
+            detailed: "This makes it a 'polyalphabetic substitution cipher'. If the letter key is 'SECRET', the first letter shifts by 'S', the second by 'E', etc. Our version also supports an isolated Number Key for shifting digits.",
+            example: `EXAMPLE:
+Input: HELLO (Letter Key: KEY)
+Output: RIJVS`
         }
     },
     {
@@ -73,7 +79,10 @@ export const methods = [
         decode: rot13,
         learning: {
             short: "Shifts letters by exactly 13 places. Because the alphabet has 26 letters, doing it twice gets you back to the start.",
-            detailed: "ROT13 is often used in online forums as a simple means of hiding spoilers, punchlines, puzzle solutions, and offensive materials from the casual glance."
+            detailed: "ROT13 is often used in online forums as a simple means of hiding spoilers, punchlines, puzzle solutions, and offensive materials from the casual glance.",
+            example: `EXAMPLE:
+Input: HELLO
+Output: URYYB`
         }
     },
     {
@@ -89,7 +98,10 @@ export const methods = [
         decode: atbash,
         learning: {
             short: "Reverses the alphabet so A=Z, B=Y, C=X, etc.",
-            detailed: "Originally developed for the Hebrew alphabet. It is a specific type of monoalphabetic substitution cipher where the key is just the alphabet in reverse."
+            detailed: "Originally developed for the Hebrew alphabet. It is a specific type of monoalphabetic substitution cipher where the key is just the alphabet in reverse.",
+            example: `EXAMPLE:
+Input: HELLO
+Output: SVOOL`
         }
     },
     {
@@ -105,7 +117,10 @@ export const methods = [
         decode: affineDecode,
         learning: {
             short: "Uses a mathematical function (ax + b) to mix up the letters.",
-            detailed: "The 'a' key must be a number that shares no common factors with 26 (coprime). It multiplies the letter's position, then adds the 'b' key. It is harder than Caesar but still vulnerable to frequency analysis."
+            detailed: "The 'a' key must be a number that shares no common factors with 26 (coprime). It multiplies the letter's position, then adds the 'b' key. It is harder than Caesar but still vulnerable to frequency analysis.",
+            example: `EXAMPLE:
+Input: HELLO (Multiplier: 5, Shift: 8)
+Output: RCLLA`
         }
     },
     {
@@ -121,7 +136,10 @@ export const methods = [
         decode: railFenceDecode,
         learning: {
             short: "A transposition cipher that jumbles the order of characters by writing them in a zigzag pattern.",
-            detailed: "Instead of replacing letters (substitution), it moves them around (transposition). You write the message diagonally downwards, then upwards across 'rails', and then read each rail row by row."
+            detailed: "Instead of replacing letters (substitution), it moves them around (transposition). You write the message diagonally downwards, then upwards across 'rails', and then read each rail row by row.",
+            example: `EXAMPLE:
+Input: HELLOWORLD (Rails: 3)
+Output: HOLELWRDLO`
         }
     },
     // Encodings
@@ -138,7 +156,10 @@ export const methods = [
         decode: binaryDecode,
         learning: {
             short: "Translates characters into standard 8-bit binary.",
-            detailed: "Binary is the fundamental language of computers. It uses only two states (0 and 1). This is an encoding, NOT encryption. Anyone who knows it is binary can easily translate it back."
+            detailed: "Binary is the fundamental language of computers. It uses only two states (0 and 1). This is an encoding, NOT encryption. Anyone who knows it is binary can easily translate it back.",
+            example: `EXAMPLE:
+Input: A
+Output: 01000001`
         }
     },
     {
@@ -154,7 +175,10 @@ export const methods = [
         decode: hexDecode,
         learning: {
             short: "Translates characters into Base-16 values.",
-            detailed: "Often used in computing to represent binary data in a more human-readable format. Like binary, hexadecimal is an encoding, not encryption."
+            detailed: "Often used in computing to represent binary data in a more human-readable format. Like binary, hexadecimal is an encoding, not encryption.",
+            example: `EXAMPLE:
+Input: Hello
+Output: 48 65 6c 6c 6f`
         }
     },
     {
@@ -170,7 +194,10 @@ export const methods = [
         decode: base64Decode,
         learning: {
             short: "Base64 is a way to encode data so it safely travels across networks.",
-            detailed: "Base64 is encoding, not encryption. It is often used for email attachments or embedding images in HTML. It usually ends with one or two '=' padding characters."
+            detailed: "Base64 is encoding, not encryption. It is often used for email attachments or embedding images in HTML. It usually ends with one or two '=' padding characters.",
+            example: `EXAMPLE:
+Input: Hello
+Output: SGVsbG8=`
         }
     },
     {
@@ -186,7 +213,10 @@ export const methods = [
         decode: asciiDecode,
         learning: {
             short: "Turns each character into its corresponding ASCII decimal number.",
-            detailed: "For example, 'A' is 65, 'a' is 97. It is the most common character encoding standard in early computing."
+            detailed: "For example, 'A' is 65, 'a' is 97. It is the most common character encoding standard in early computing.",
+            example: `EXAMPLE:
+Input: Hello
+Output: 72 101 108 108 111`
         }
     },
     {
@@ -202,7 +232,10 @@ export const methods = [
         decode: a1z26Decode,
         learning: {
             short: "A straightforward substitution where A=1, B=2, C=3...",
-            detailed: "A very common substitution code found in basic puzzles. Numbers are usually separated by hyphens so '12' isn't confused with '1' and '2' (A and B or L?)."
+            detailed: "A very common substitution code found in basic puzzles. Numbers are usually separated by hyphens so '12' isn't confused with '1' and '2' (A and B or L?).",
+            example: `EXAMPLE:
+Input: CAB
+Output: 3-1-2`
         }
     },
     // Transformations
@@ -219,7 +252,10 @@ export const methods = [
         decode: morseDecode,
         learning: {
             short: "An old telecommunication method using short dots (.) and long dashes (-).",
-            detailed: "In Morse output, '/' represents a space between words. It was designed so that the most common letters (like E) have the shortest codes."
+            detailed: "In Morse output, '/' represents a space between words. It was designed so that the most common letters (like E) have the shortest codes.",
+            example: `EXAMPLE:
+Input: SOS
+Output: ... --- ...`
         }
     },
     {
@@ -235,7 +271,10 @@ export const methods = [
         decode: reverseText,
         learning: {
             short: "Turns 'Hello' into 'olleH'.",
-            detailed: "This is a basic string manipulation, not encryption. It can be chained with other ciphers to add a small layer of obscurity."
+            detailed: "This is a basic string manipulation, not encryption. It can be chained with other ciphers to add a small layer of obscurity.",
+            example: `EXAMPLE:
+Input: Hello
+Output: olleH`
         }
     },
     {
@@ -251,7 +290,10 @@ export const methods = [
         decode: natoDecode,
         learning: {
             short: "A=Alpha, B=Bravo, C=Charlie.",
-            detailed: "This is primarily a way of spelling letters clearly over radio/speech, not encryption. It ensures similar-sounding letters (M and N, B and D) are not confused in noisy environments."
+            detailed: "This is primarily a way of spelling letters clearly over radio/speech, not encryption. It ensures similar-sounding letters (M and N, B and D) are not confused in noisy environments.",
+            example: `EXAMPLE:
+Input: CAT
+Output: Charlie Alpha Tango`
         }
     },
     {
@@ -267,7 +309,10 @@ export const methods = [
         decode: urlDecode,
         learning: {
             short: "Encodes spaces and special characters for web addresses.",
-            detailed: "Also known as Percent-encoding. A space becomes %20, and an exclamation mark becomes %21. Used heavily in web development."
+            detailed: "Also known as Percent-encoding. A space becomes %20, and an exclamation mark becomes %21. Used heavily in web development.",
+            example: `EXAMPLE:
+Input: Hello World!
+Output: Hello%20World%21`
         }
     },
     {
@@ -283,7 +328,10 @@ export const methods = [
         decode: leetDecode,
         learning: {
             short: "Internet slang where letters are replaced by numbers that resemble them.",
-            detailed: "Originating in the 1980s on bulletin board systems, leetspeak uses numerical representations like '1337' for 'leet' (elite). It destroys casing."
+            detailed: "Originating in the 1980s on bulletin board systems, leetspeak uses numerical representations like '1337' for 'leet' (elite). It destroys casing.",
+            example: `EXAMPLE:
+Input: LEET
+Output: L337`
         }
     },
     {
@@ -299,7 +347,10 @@ export const methods = [
         decode: hashingDecode,
         learning: {
             short: "A one-way mathematical function that creates a unique fingerprint of the data.",
-            detailed: "Hashing is NOT encryption. You cannot decode a hash back into the original text. It is used to verify data integrity or securely store passwords."
+            detailed: "Hashing is NOT encryption. You cannot decode a hash back into the original text. It is used to verify data integrity or securely store passwords.",
+            example: `EXAMPLE:
+Input: Hello
+Output: 8b1a9953c4611296a827abf8c47804d7`
         }
     },
     {
@@ -315,7 +366,10 @@ export const methods = [
         decode: hashingDecode,
         learning: {
             short: "A modern, highly secure one-way hashing algorithm.",
-            detailed: "Used by Bitcoin and SSL certificates. Even a tiny change to the input completely changes the output hash. Like MD5, it cannot be reversed."
+            detailed: "Used by Bitcoin and SSL certificates. Even a tiny change to the input completely changes the output hash. Like MD5, it cannot be reversed.",
+            example: `EXAMPLE:
+Input: Hello
+Output: 185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969`
         }
     }
 ];

@@ -89,9 +89,22 @@ export default function Library() {
                     borderRadius: '6px'
                   }}>
                     <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>How it Works</h3>
-                    <p style={{ lineHeight: 1.6, marginBottom: '2rem', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                    <p style={{ lineHeight: 1.6, marginBottom: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
                       {method.learning.detailed}
                     </p>
+                    
+                    {method.learning.example && (
+                      <div className="font-mono text-sm mb-6" style={{ 
+                        backgroundColor: 'var(--bg-base)', 
+                        padding: '1rem', 
+                        borderRadius: '4px',
+                        borderLeft: '2px solid var(--accent)',
+                        whiteSpace: 'pre-wrap',
+                        color: 'var(--text-primary)'
+                      }}>
+                        {method.learning.example}
+                      </div>
+                    )}
                     
                     <div className="flex gap-4">
                       {method.category !== 'Hashing' && (
@@ -127,6 +140,34 @@ export default function Library() {
             );
           })}
         </div>
+
+        {/* Advanced Concepts Section */}
+        <div style={{ marginTop: '2rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '4rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', letterSpacing: '-0.5px', marginBottom: '2rem', color: 'var(--text-primary)' }}>
+            ADVANCED CONCEPTS (COMING SOON)
+          </h2>
+          
+          <div className="flex flex-col gap-8">
+            <div className="panel flex flex-col gap-2">
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)' }}>Steganography</h3>
+              <p className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                While cryptography focuses on making a message unreadable, <strong>Steganography</strong> focuses on keeping the existence of the message a secret. 
+                For example, you can hide text inside the pixels of an image file. To the human eye, the image looks completely normal, but a computer can extract the hidden binary text data from the least significant bits of the image.
+              </p>
+            </div>
+
+            <div className="panel flex flex-col gap-2">
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)' }}>RSA (Public-Key Cryptography)</h3>
+              <p className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                Classical ciphers (like Caesar or Vigenère) are <strong>Symmetric</strong>: you use the same key to lock and unlock the message. 
+                <strong>RSA</strong> is <strong>Asymmetric</strong>. You have two mathematically linked keys: a Public Key and a Private Key. 
+                You can give your Public Key to anyone so they can encrypt a message to you, but only YOU can decrypt it with your Secret Private Key. 
+                This forms the basis of all modern internet security (HTTPS).
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

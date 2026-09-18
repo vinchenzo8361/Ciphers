@@ -163,23 +163,90 @@ export default function Library() {
           </h2>
           
           <div className="flex flex-col gap-8">
-            <div className="panel flex flex-col gap-2">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)' }}>Steganography</h3>
-              <p className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                While cryptography focuses on making a message unreadable, <strong>Steganography</strong> focuses on keeping the existence of the message a secret. 
-                For example, you can hide text inside the pixels of an image file. To the human eye, the image looks completely normal, but a computer can extract the hidden binary text data from the least significant bits of the image.
-              </p>
+            
+            {/* RSA Entry */}
+            <div className="panel flex flex-col gap-4">
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-primary)' }}>RSA (Public-Key Cryptography)</h3>
+              
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>What is it?</strong><br/>
+                RSA is the backbone of all modern internet security. When you see the little "padlock" icon in your browser (HTTPS), you are relying on systems like RSA. Unlike classical ciphers (like Caesar) where you use the <em>same</em> password to lock and unlock the message (Symmetric), RSA uses <em>two different mathematical keys</em> (Asymmetric).
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>The Layman's Explanation (The Open Padlock)</strong><br/>
+                Imagine your <strong>Public Key</strong> is an open padlock, and your <strong>Private Key</strong> is the physical metal key that unlocks it. <br/><br/>
+                You can make a million copies of your open padlock and give them to everyone in the world (make it public). If your friend Alice wants to send you a secret message, she puts it in a box and snaps your padlock shut. 
+                <br/><br/>
+                Here is the magic of RSA: Once the padlock is snapped shut, <em>even Alice cannot open the box anymore</em>. Only YOU can open it, because you are the only person who kept the physical Private Key.
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It</strong><br/>
+                RSA works because of "prime factorization." It is very easy for a computer to multiply two massive prime numbers together to get a gigantic result. However, if you only give a computer the gigantic result, it is virtually impossible for it to reverse-engineer what the two original prime numbers were. The Public Key is the giant number, and the Private Key contains the two original prime numbers.
+              </div>
+
+              <div className="font-mono text-sm" style={{ 
+                backgroundColor: 'var(--bg-base)', 
+                padding: '1rem', 
+                borderRadius: '4px',
+                borderLeft: '2px solid var(--accent)',
+                whiteSpace: 'pre-wrap',
+                color: 'var(--text-primary)',
+                marginTop: '0.5rem'
+              }}>
+                EXAMPLE / APPLICATION:<br/>
+                <span style={{ color: 'var(--text-secondary)' }}>
+                1. Bob generates a Public Key (Padlock) and Private Key (Physical Key).<br/>
+                2. Bob posts his Public Key on his Twitter profile.<br/>
+                3. Alice copies the Public Key, encrypts her message "HELLO", and sends the gibberish to Bob.<br/>
+                4. A hacker intercepts the gibberish, but cannot read it without the Private Key.<br/>
+                5. Bob receives the gibberish, uses his Private Key, and reads "HELLO".
+                </span>
+              </div>
             </div>
 
-            <div className="panel flex flex-col gap-2">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-primary)' }}>RSA (Public-Key Cryptography)</h3>
-              <p className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                Classical ciphers (like Caesar or Vigenère) are <strong>Symmetric</strong>: you use the same key to lock and unlock the message. 
-                <strong>RSA</strong> is <strong>Asymmetric</strong>. You have two mathematically linked keys: a Public Key and a Private Key. 
-                You can give your Public Key to anyone so they can encrypt a message to you, but only YOU can decrypt it with your Secret Private Key. 
-                This forms the basis of all modern internet security (HTTPS).
-              </p>
+            {/* Steganography Entry */}
+            <div className="panel flex flex-col gap-4">
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-primary)' }}>Steganography</h3>
+              
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>What is it?</strong><br/>
+                While standard cryptography focuses on turning a message into unreadable gibberish, <strong>Steganography</strong> focuses on keeping the very <em>existence</em> of the message a secret. 
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>The Layman's Explanation (Invisible Ink)</strong><br/>
+                If a prison guard inspects a letter going to an inmate and sees a page full of random letters (a cipher), they will immediately confiscate it because they know it's a secret code. <br/><br/>
+                But what if you write a totally normal, boring letter to the inmate about the weather, but you write a second secret message between the lines using invisible ink? The guard inspects the letter, thinks it's boring, and lets it through. That is Steganography: hiding a secret inside something completely innocent.
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>The Technical Application (LSB Image Hiding)</strong><br/>
+                In the digital world, we hide text inside the pixels of images (like a normal photo of a cat). Every pixel is made of Red, Green, and Blue colors, measured on a scale from 0 to 255. <br/><br/>
+                In binary, 255 is 11111111. If we change that value to 254 (11111110), the color of the pixel changes by 1/255th. The human eye physically cannot see the difference between pure red and 99.6% pure red. By slightly tweaking the very last digit (the Least Significant Bit) of thousands of pixels in the cat photo, we can secretly store thousands of 1s and 0s (binary text) inside the image without anyone ever knowing.
+              </div>
+
+              <div className="font-mono text-sm" style={{ 
+                backgroundColor: 'var(--bg-base)', 
+                padding: '1rem', 
+                borderRadius: '4px',
+                borderLeft: '2px solid var(--accent)',
+                whiteSpace: 'pre-wrap',
+                color: 'var(--text-primary)',
+                marginTop: '0.5rem'
+              }}>
+                EXAMPLE / APPLICATION:<br/>
+                <span style={{ color: 'var(--text-secondary)' }}>
+                1. You have a photo of a landscape.<br/>
+                2. You use Steganography to embed a secret document inside the image.<br/>
+                3. You post the image on a public forum.<br/>
+                4. Everyone else just sees a nice landscape.<br/>
+                5. Your friend downloads the image, runs it through a Steganography decoder, and extracts the secret document.
+                </span>
+              </div>
             </div>
+
           </div>
         </div>
 

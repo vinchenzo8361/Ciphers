@@ -10,10 +10,23 @@ const englishFreq = {
     'q': 0.09, 'z': 0.07, ' ': 15.0 
 };
 
+const commonWords = new Set([
+    'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i', 'it', 'for', 'not', 'on', 'with', 
+    'he', 'as', 'you', 'do', 'at', 'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she', 
+    'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what', 'so', 'up', 'out', 'if', 
+    'about', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'no', 'just', 'him',
+    'know', 'take', 'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other', 
+    'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use',
+    'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these'
+]);
+
 function scoreText(text) {
     let score = 0;
     let letterCount = 0;
-    for (let char of text.toLowerCase()) {
+    const lowerText = text.toLowerCase();
+    
+    // Frequency score
+    for (let char of lowerText) {
         if (englishFreq[char]) {
             score += englishFreq[char];
         }
@@ -21,7 +34,19 @@ function scoreText(text) {
             letterCount++;
         }
     }
-    return letterCount > 0 ? score / text.length : 0;
+    
+    let baseScore = letterCount > 0 ? score / text.length : 0;
+
+    // Dictionary bonus
+    let dictionaryBonus = 0;
+    const words = lowerText.split(/[\s\W]+/);
+    for (let word of words) {
+        if (word.length > 0 && commonWords.has(word)) {
+            dictionaryBonus += 5.0; // Massive boost for real English words
+        }
+    }
+
+    return baseScore + dictionaryBonus;
 }
 
 export default function Codebreaker() {

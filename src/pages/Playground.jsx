@@ -235,8 +235,12 @@ export default function Playground() {
                               </div>
                               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600' }}>{step.method.name.toUpperCase()}</h3>
                             </div>
-                            <button onClick={() => removeMethod(index)} className="btn-tertiary">
-                              <X size={16} />
+                            <button 
+                              onClick={() => removeMethod(index)} 
+                              style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                              title="Remove method"
+                            >
+                              <X size={18} />
                             </button>
                           </div>
 
@@ -252,7 +256,10 @@ export default function Playground() {
                               <div className="flex justify-between items-center">
                                 <label className="text-xs font-bold text-muted">OUTPUT</label>
                                 {step.output && !step.error && (
-                                  <button onClick={() => handleCopy(step.output, index)} className="btn-tertiary text-xs flex items-center gap-1" style={{ padding: 0 }}>
+                                  <button 
+                                    onClick={() => handleCopy(step.output, index)} 
+                                    style={{ background: 'none', border: 'none', color: copiedIndex === index ? 'var(--success)' : 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}
+                                  >
                                     {copiedIndex === index ? <><Check size={12}/> COPIED</> : <><Copy size={12}/> COPY</>}
                                   </button>
                                 )}

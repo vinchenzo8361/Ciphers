@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { KeyRound, RefreshCw, Copy, Check } from 'lucide-react';
 
 export default function PasswordCreator() {
-  const [length, setLength] = useState(16);
+  const [lengthInput, setLengthInput] = useState('16');
   const [useUpper, setUseUpper] = useState(true);
   const [useLower, setUseLower] = useState(true);
   const [useNumbers, setUseNumbers] = useState(true);
   const [useSymbols, setUseSymbols] = useState(true);
+  const [complexity, setComplexity] = useState(3); // 1 to 5
   const [password, setPassword] = useState('');
   const [copied, setCopied] = useState(false);
 
   const generate = () => {
+    let length = parseInt(lengthInput, 10);
+    if (isNaN(length) || length < 1) length = 4;
+    if (length > 100) length = 100;
+
     const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lower = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
@@ -19,8 +24,12 @@ export default function PasswordCreator() {
     let chars = "";
     if (useUpper) chars += upper;
     if (useLower) chars += lower;
-    if (useNumbers) chars += numbers;
-    if (useSymbols) chars += symbols;
+    
+    // Increase weight of numbers/symbols based on complexity slider
+    const extraWeight = complexity > 3 ? complexity - 2 : 1; 
+    
+    if (useNumbers) chars += numbers.repeat(complexity > 2 ? extraWeight : 1);
+    if (useSymbols) chars += symbols.repeat(complexity > 2 ? extraWeight : 1);
     
     if (chars === "") {
         setPassword("");
@@ -28,7 +37,6 @@ export default function PasswordCreator() {
     }
 
     let result = "";
-    // Ensure at least one of each selected type if length allows
     let mandatoryChars = [];
     if (useUpper) mandatoryChars.push(upper[Math.floor(Math.random() * upper.length)]);
     if (useLower) mandatoryChars.push(lower[Math.floor(Math.random() * lower.length)]);
@@ -43,20 +51,25 @@ export default function PasswordCreator() {
       result += chars[Math.floor(Math.random() * chars.length)];
     }
     
-    // Shuffle the result
     result = result.split('').sort(() => 0.5 - Math.random()).join('');
     setPassword(result);
   };
 
   useEffect(() => {
     generate();
-  }, [length, useUpper, useLower, useNumbers, useSymbols]);
+  }, [lengthInput, useUpper, useLower, useNumbers, useSymbols, complexity]);
 
   const handleCopy = () => {
     if (!password) return;
     navigator.clipboard.writeText(password);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleLengthBlur = () => {
+      let val = parseInt(lengthInput, 10);
+      if (isNaN(val) || val < 4) setLengthInput('4');
+      else if (val > 100) setLengthInput('100');
   };
 
   return (
@@ -104,26 +117,35 @@ export default function PasswordCreator() {
         {/* Controls */}
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-                <div className="flex justify-between">
-                    <label className="text-sm font-bold">Password Length (Max 100)</label>
-                </div>
+                <label className="text-sm font-bold">Password Length (Max 100)</label>
                 <input 
                     type="number" 
-                    className="input"
-                    min="4" 
-                    max="100" 
-                    value={length} 
-                    onChange={(e) => {
-                        let val = parseInt(e.target.value);
-                        if (isNaN(val)) val = 4;
-                        if (val > 100) val = 100;
-                        setLength(val);
-                    }}
-                    style={{ width: '100%' }}
+                    className="input font-mono"
+                    value={lengthInput} 
+                    onChange={(e) => setLengthInput(e.target.value)}
+                    onBlur={handleLengthBlur}
+                    style={{ width: '100px' }}
+                    placeholder="16"
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="flex flex-col gap-2 mt-2">
+                <div className="flex justify-between">
+                    <label className="text-sm font-bold">Symbol/Number Variety</label>
+                    <span className="text-xs text-muted font-mono">LEVEL: {complexity}</span>
+                </div>
+                <input 
+                    type="range" 
+                    min="1" 
+                    max="5" 
+                    value={complexity} 
+                    onChange={(e) => setComplexity(parseInt(e.target.value, 10))}
+                    style={{ width: '100%', cursor: 'pointer' }}
+                />
+                <p className="text-xs text-muted">Higher variety injects a higher ratio of symbols and numbers relative to letters.</p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '0.5rem' }}>
                 <label className="flex items-center gap-3" style={{ cursor: 'pointer' }}>
                     <input type="checkbox" checked={useUpper} onChange={(e) => setUseUpper(e.target.checked)} style={{ width: '18px', height: '18px' }} />
                     <span className="text-sm font-bold">Uppercase (A-Z)</span>

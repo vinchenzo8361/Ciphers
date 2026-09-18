@@ -65,6 +65,53 @@ export default function Library() {
             </ul>
           </div>
         ))}
+
+        {/* Add Advanced Concepts to Sidebar */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            ADVANCED CONCEPTS
+          </h3>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <li>
+              <a 
+                href="#rsa-concept" 
+                style={{ 
+                  display: 'block',
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '4px',
+                  backgroundColor: expandedMethod === 'rsa-concept' ? 'var(--accent-muted)' : 'transparent',
+                  color: expandedMethod === 'rsa-concept' ? 'var(--accent)' : 'var(--text-primary)', 
+                  fontSize: '0.85rem',
+                  fontWeight: expandedMethod === 'rsa-concept' ? '600' : '400',
+                  textDecoration: 'none',
+                  transition: 'all 0.15s ease'
+                }}
+                onClick={() => setExpandedMethod('rsa-concept')}
+              >
+                RSA
+              </a>
+            </li>
+            <li>
+              <a 
+                href="#steg-concept" 
+                style={{ 
+                  display: 'block',
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '4px',
+                  backgroundColor: expandedMethod === 'steg-concept' ? 'var(--accent-muted)' : 'transparent',
+                  color: expandedMethod === 'steg-concept' ? 'var(--accent)' : 'var(--text-primary)', 
+                  fontSize: '0.85rem',
+                  fontWeight: expandedMethod === 'steg-concept' ? '600' : '400',
+                  textDecoration: 'none',
+                  transition: 'all 0.15s ease'
+                }}
+                onClick={() => setExpandedMethod('steg-concept')}
+              >
+                Steganography
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* Main Content Area */}
@@ -165,7 +212,7 @@ export default function Library() {
           <div className="flex flex-col gap-8">
             
             {/* RSA Entry */}
-            <div className="panel flex flex-col gap-4">
+            <div id="rsa-concept" className="panel flex flex-col gap-4" style={{ scrollMarginTop: '2rem' }}>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-primary)' }}>RSA (Public-Key Cryptography)</h3>
               
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
@@ -182,8 +229,10 @@ export default function Library() {
               </div>
 
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It</strong><br/>
-                RSA works because of "prime factorization." It is very easy for a computer to multiply two massive prime numbers together to get a gigantic result. However, if you only give a computer the gigantic result, it is virtually impossible for it to reverse-engineer what the two original prime numbers were. The Public Key is the giant number, and the Private Key contains the two original prime numbers.
+                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It (As seen on Veritasium)</strong><br/>
+                To generate these keys, a computer picks two gigantic prime numbers (let's call them $P$ and $Q$) and multiplies them together to get a massive number $N$. It is mathematically easy to multiply them, but if you only have $N$, it would take supercomputers millions of years to figure out what $P$ and $Q$ were.<br/><br/>
+                <strong>What it actually does to the input:</strong><br/>
+                If you want to send the message "HI", the computer first converts "HI" into a number (like 7273). It then takes 7273, multiplies it by itself $E$ times (where $E$ is part of your Public Key), and then divides that impossibly huge number by $N$. The <em>remainder</em> of that division is the encrypted ciphertext that gets sent across the internet. It uses "Clock Math" (Modulo Arithmetic) to ensure it can only be reversed by someone holding the Private Key ($D$).
               </div>
 
               <div className="font-mono text-sm" style={{ 
@@ -207,7 +256,7 @@ export default function Library() {
             </div>
 
             {/* Steganography Entry */}
-            <div className="panel flex flex-col gap-4">
+            <div id="steg-concept" className="panel flex flex-col gap-4" style={{ scrollMarginTop: '2rem' }}>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-primary)' }}>Steganography</h3>
               
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
@@ -225,6 +274,9 @@ export default function Library() {
                 <strong style={{ color: 'var(--text-primary)' }}>The Technical Application (LSB Image Hiding)</strong><br/>
                 In the digital world, we hide text inside the pixels of images (like a normal photo of a cat). Every pixel is made of Red, Green, and Blue colors, measured on a scale from 0 to 255. <br/><br/>
                 In binary, 255 is 11111111. If we change that value to 254 (11111110), the color of the pixel changes by 1/255th. The human eye physically cannot see the difference between pure red and 99.6% pure red. By slightly tweaking the very last digit (the Least Significant Bit) of thousands of pixels in the cat photo, we can secretly store thousands of 1s and 0s (binary text) inside the image without anyone ever knowing.
+                <br/><br/>
+                <strong>What it actually does to the input:</strong><br/>
+                If your secret message is the letter "A" (which is `01000001` in binary), the program looks at the next 8 pixels in the image. It forces the final bit of the first pixel to be `0`, the final bit of the second pixel to be `1`, the third to be `0`, and so on. Your text is literally dissolved into the lowest-level color data of the image.
               </div>
 
               <div className="font-mono text-sm" style={{ 

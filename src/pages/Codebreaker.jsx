@@ -17,7 +17,9 @@ const commonWords = new Set([
     'about', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'no', 'just', 'him',
     'know', 'take', 'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other', 
     'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use',
-    'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these'
+    'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these',
+    // Common test words
+    'hello', 'world', 'test', 'testing', 'secret', 'message', 'hi', 'hey', 'foo', 'bar', 'password'
 ]);
 
 function scoreText(text) {
@@ -37,12 +39,20 @@ function scoreText(text) {
     
     let baseScore = letterCount > 0 ? score / text.length : 0;
 
+    // Penalty for impossible/highly unlikely bigrams to prevent "axeeh" from beating "hello"
+    const badBigrams = ['qx', 'jz', 'zx', 'xj', 'qj', 'vk', 'xq', 'xe', 'hx'];
+    for (let bg of badBigrams) {
+        if (lowerText.includes(bg)) {
+            baseScore -= 2.0; 
+        }
+    }
+
     // Dictionary bonus
     let dictionaryBonus = 0;
     const words = lowerText.split(/[\s\W]+/);
     for (let word of words) {
         if (word.length > 0 && commonWords.has(word)) {
-            dictionaryBonus += 5.0; // Massive boost for real English words
+            dictionaryBonus += 10.0; // Massive boost for real English words
         }
     }
 
@@ -172,29 +182,45 @@ export default function Codebreaker() {
                                     rows={3} 
                                     value={res.output} 
                                     readOnly 
-                                    style={{ backgroundColor: 'var(--bg-surface-raised)' }}
+                                    style={{ backgroundColor: 'var(--bg-surface-raised)', fontSize: '1.1rem' }}
                                 />
                             </div>
 
                             {/* Show All Shifts Button for Caesar */}
                             {res.methodId === 'caesar' && (
-                                <div className="mt-4 border-t border-subtle pt-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                                <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border-subtle)' }}>
                                     <button 
-                                        className="btn btn-secondary text-xs w-full justify-between" 
+                                        className="btn btn-secondary text-sm w-full justify-between" 
+                                        style={{ padding: '0.75rem 1rem' }}
                                         onClick={() => setShowAllCaesar(!showAllCaesar)}
                                     >
-                                        <span>VIEW ALL 25 CAESAR SHIFT VARIATIONS</span>
-                                        {showAllCaesar ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                        <span className="font-bold">VIEW ALL 25 CAESAR SHIFT VARIATIONS</span>
+                                        {showAllCaesar ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                                     </button>
                                     
                                     {showAllCaesar && (
-                                        <div className="mt-4 flex flex-col gap-2" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                                        <div className="mt-4" style={{ 
+                                            display: 'grid', 
+                                            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
+                                            gap: '0.75rem',
+                                            maxHeight: '400px', 
+                                            overflowY: 'auto',
+                                            padding: '0.5rem'
+                                        }}>
                                             {allCaesarShifts.map((shiftRes, sIdx) => (
-                                                <div key={sIdx} className="flex gap-2" style={{ fontSize: '0.85rem' }}>
-                                                    <div className="font-mono text-muted" style={{ width: '80px', flexShrink: 0 }}>
-                                                        Shift +{shiftRes.settings.shift}
+                                                <div 
+                                                    key={sIdx} 
+                                                    style={{ 
+                                                        backgroundColor: 'var(--bg-base)', 
+                                                        padding: '0.75rem', 
+                                                        borderRadius: '6px',
+                                                        border: shiftRes.settings.shift === res.settings.shift ? '2px solid var(--accent)' : '1px solid var(--border-subtle)'
+                                                    }}
+                                                >
+                                                    <div className="text-xs font-bold mb-1" style={{ color: shiftRes.settings.shift === res.settings.shift ? 'var(--accent)' : 'var(--text-muted)' }}>
+                                                        SHIFT +{shiftRes.settings.shift}
                                                     </div>
-                                                    <div className="font-mono" style={{ color: shiftRes.settings.shift === res.settings.shift ? 'var(--accent)' : 'var(--text-primary)'}}>
+                                                    <div className="font-mono text-sm" style={{ color: 'var(--text-primary)', wordBreak: 'break-word' }}>
                                                         {shiftRes.output}
                                                     </div>
                                                 </div>

@@ -12,6 +12,7 @@ import Library from './pages/Library';
 import Codebreaker from './pages/Codebreaker';
 import PasswordCreator from './pages/PasswordCreator';
 import CodebreakingGuide from './pages/CodebreakingGuide';
+import EnigmaCracker from './pages/EnigmaCracker';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             </Route>
 
             <Route path="codebreaker" element={<Codebreaker />} />
+            <Route path="enigma-cracker" element={<EnigmaCracker />} />
             <Route path="password-creator" element={<PasswordCreator />} />
             <Route path="codebreaking-guide" element={<CodebreakingGuide />} />
             

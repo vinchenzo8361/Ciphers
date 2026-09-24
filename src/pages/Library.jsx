@@ -229,10 +229,23 @@ export default function Library() {
               </div>
 
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It (As seen on Veritasium)</strong><br/>
+                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It (As seen on <a href="https://www.youtube.com/watch?v=wXB-V_Keiu8" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Veritasium</a>)</strong><br/>
                 To generate these keys, a computer picks two gigantic prime numbers (let's call them $P$ and $Q$) and multiplies them together to get a massive number $N$. It is mathematically easy to multiply them, but if you only have $N$, it would take supercomputers millions of years to figure out what $P$ and $Q$ were.<br/><br/>
-                <strong>What it actually does to the input:</strong><br/>
-                If you want to send the message "HI", the computer first converts "HI" into a number (like 7273). It then takes 7273, multiplies it by itself $E$ times (where $E$ is part of your Public Key), and then divides that impossibly huge number by $N$. The <em>remainder</em> of that division is the encrypted ciphertext that gets sent across the internet. It uses "Clock Math" (Modulo Arithmetic) to ensure it can only be reversed by someone holding the Private Key ($D$).
+                <strong>A Step-by-Step Mathematical Example:</strong><br/>
+                Let's use very small primes to see how it works.<br/>
+                1. Pick primes: $P = 5$, $Q = 11$.<br/>
+                2. Calculate $N = P \times Q = 55$. (This is the core of your Public Key).<br/>
+                3. Calculate Euler's Totient $\phi = (P-1) \times (Q-1) = 4 \times 10 = 40$.<br/>
+                4. Pick an encryption key $E = 3$. (Must not share factors with 40).<br/>
+                5. Calculate the decryption key $D$ so that $(D \times E) \pmod{40} = 1$. Here, $D = 27$ because $(27 \times 3) = 81$, and $81 \pmod{40} = 1$.<br/><br/>
+                <strong>Public Key:</strong> $(N=55, E=3)$<br/>
+                <strong>Private Key:</strong> $(D=27)$<br/><br/>
+                <strong>Encrypting a Message (What it actually does to the input):</strong><br/>
+                If you want to send the message "2", you take $2$, multiply it by itself $E$ times, and find the remainder divided by $N$.<br/>
+                $C = 2^3 \pmod{55} = 8$. The encrypted ciphertext is <strong>8</strong>.<br/><br/>
+                <strong>Decrypting the Message:</strong><br/>
+                Only the person with $D=27$ can reverse this.<br/>
+                $M = 8^{27} \pmod{55}$. The math simplifies perfectly back to <strong>2</strong>!
               </div>
 
               <div className="font-mono text-sm" style={{ 
@@ -252,6 +265,25 @@ export default function Library() {
                 4. A hacker intercepts the gibberish, but cannot read it without the Private Key.<br/>
                 5. Bob receives the gibberish, uses his Private Key, and reads "HELLO".
                 </span>
+              </div>
+            </div>
+
+            {/* Enigma Entry */}
+            <div id="enigma-concept" className="panel flex flex-col gap-4" style={{ scrollMarginTop: '2rem' }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-primary)' }}>The Enigma Machine</h3>
+              
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>What is it?</strong><br/>
+                The Enigma machine was an electromechanical encryption device used extensively by Nazi Germany during World War II. It is a highly complex polyalphabetic substitution cipher, famous because it was eventually cracked by Alan Turing and the team at Bletchley Park, significantly shortening the war.
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>How it Works</strong><br/>
+                The machine consists of a keyboard, a plugboard, 3 to 4 spinning rotors, and a reflector. Every time you press a letter, the first rotor clicks forward one position. This means that if you press 'A' three times, it might encrypt as 'X', then 'J', then 'L'. The circuit path changes for every single letter!<br/><br/>
+                1. <strong>Plugboard:</strong> Swaps pairs of letters before they enter the rotors (e.g., A becomes F).<br/>
+                2. <strong>Rotors:</strong> The signal passes through the scrambled wiring of 3 rotors.<br/>
+                3. <strong>Reflector:</strong> The signal is bounced back entirely through the rotors and plugboard again.<br/>
+                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.
               </div>
             </div>
 

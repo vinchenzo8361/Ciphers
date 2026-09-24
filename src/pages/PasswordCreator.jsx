@@ -10,6 +10,19 @@ export default function PasswordCreator() {
   const [complexity, setComplexity] = useState(3); // 1 to 5
   const [password, setPassword] = useState('');
   const [copied, setCopied] = useState(false);
+  const [entropy, setEntropy] = useState(0);
+
+  const calculateEntropy = (len, charPoolSize) => {
+      if (len === 0 || charPoolSize === 0) return 0;
+      return len * Math.log2(charPoolSize);
+  };
+
+  const getStrengthLabel = (e) => {
+      if (e < 40) return { label: 'WEAK', color: 'var(--error)', width: '25%' };
+      if (e < 60) return { label: 'FAIR', color: '#fbbf24', width: '50%' };
+      if (e < 80) return { label: 'GOOD', color: '#3b82f6', width: '75%' };
+      return { label: 'STRONG', color: 'var(--success)', width: '100%' };
+  };
 
   const generate = () => {
     let length = parseInt(lengthInput, 10);
@@ -22,17 +35,25 @@ export default function PasswordCreator() {
     const symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?";
     
     let chars = "";
-    if (useUpper) chars += upper;
-    if (useLower) chars += lower;
+    let poolSize = 0;
     
-    // Increase weight of numbers/symbols based on complexity slider
+    if (useUpper) { chars += upper; poolSize += 26; }
+    if (useLower) { chars += lower; poolSize += 26; }
+    
     const extraWeight = complexity > 3 ? complexity - 2 : 1; 
     
-    if (useNumbers) chars += numbers.repeat(complexity > 2 ? extraWeight : 1);
-    if (useSymbols) chars += symbols.repeat(complexity > 2 ? extraWeight : 1);
+    if (useNumbers) { 
+        chars += numbers.repeat(complexity > 2 ? extraWeight : 1);
+        poolSize += 10;
+    }
+    if (useSymbols) { 
+        chars += symbols.repeat(complexity > 2 ? extraWeight : 1);
+        poolSize += 26;
+    }
     
     if (chars === "") {
         setPassword("");
+        setEntropy(0);
         return;
     }
 
@@ -53,6 +74,7 @@ export default function PasswordCreator() {
     
     result = result.split('').sort(() => 0.5 - Math.random()).join('');
     setPassword(result);
+    setEntropy(calculateEntropy(length, poolSize));
   };
 
   useEffect(() => {
@@ -110,6 +132,22 @@ export default function PasswordCreator() {
             >
                 {password || "Select options below"}
             </div>
+            {password && (
+                <div className="flex flex-col gap-1 mt-2">
+                    <div className="flex justify-between items-center text-xs font-bold uppercase text-muted">
+                        <span>STRENGTH: <span style={{ color: getStrengthLabel(entropy).color }}>{getStrengthLabel(entropy).label}</span></span>
+                        <span>{Math.round(entropy)} BITS OF ENTROPY</span>
+                    </div>
+                    <div style={{ height: '4px', backgroundColor: 'var(--bg-base)', borderRadius: '2px', overflow: 'hidden' }}>
+                        <div style={{ 
+                            height: '100%', 
+                            width: getStrengthLabel(entropy).width, 
+                            backgroundColor: getStrengthLabel(entropy).color,
+                            transition: 'all 0.3s ease'
+                        }} />
+                    </div>
+                </div>
+            )}
         </div>
 
         <div style={{ borderTop: '1px solid var(--border-subtle)', margin: '0 -1.5rem' }} />

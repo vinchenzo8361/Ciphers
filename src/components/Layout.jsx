@@ -12,7 +12,9 @@ export default function Layout() {
     { name: 'Decoder', path: '/decoder' },
     { name: 'Playground', path: '/playground' },
     { name: 'Library', path: '/library' },
-    { name: 'Codebreaker', path: '/codebreaker' }
+    { name: 'Codebreaker', path: '/codebreaker' },
+    { name: 'Enigma Cracker', path: '/enigma-cracker' },
+    { name: 'Password Creator', path: '/password-creator' }
   ];
 
   return (

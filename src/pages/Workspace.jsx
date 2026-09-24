@@ -58,18 +58,54 @@ export default function Workspace() {
     if (Object.keys(settings).length === 0) return null;
 
     return (
-      <div className="flex gap-4 items-center" style={{ padding: '0.75rem 0' }}>
+      <div className="flex gap-4 items-center flex-wrap" style={{ padding: '0.75rem 0' }}>
         {Object.keys(settings).map(key => {
           let label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+          
+          if (key.startsWith('rotor')) {
+            return (
+              <div key={key} className="flex items-center gap-2">
+                <label className="text-xs font-bold text-muted uppercase">{key}</label>
+                <select 
+                  className="input font-mono"
+                  value={settings[key]}
+                  onChange={(e) => handleSettingChange(key, e.target.value)}
+                  style={{ width: '70px', padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
+                >
+                  <option value="I">I</option>
+                  <option value="II">II</option>
+                  <option value="III">III</option>
+                </select>
+              </div>
+            );
+          }
+
+          if (key.startsWith('start')) {
+            return (
+              <div key={key} className="flex items-center gap-2">
+                <label className="text-xs font-bold text-muted uppercase">{key.replace('start', 'Pos ')}</label>
+                <select 
+                  className="input font-mono"
+                  value={settings[key]}
+                  onChange={(e) => handleSettingChange(key, e.target.value)}
+                  style={{ width: '60px', padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
+                >
+                  {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+            );
+          }
+
           return (
             <div key={key} className="flex items-center gap-2">
               <label className="text-xs font-bold text-muted uppercase">{label}</label>
               <input 
-                className="input"
+                className="input font-mono"
                 type={typeof method.defaultSettings[key] === 'number' ? 'number' : 'text'}
                 value={settings[key]}
                 onChange={(e) => handleSettingChange(key, e.target.value)}
                 style={{ width: '120px', padding: '0.4rem 0.5rem', fontSize: '0.85rem' }}
+                placeholder={key === 'plugboard' ? 'AB CD EF' : ''}
               />
             </div>
           );

@@ -26,6 +26,8 @@ import {
     md5Hash, sha256Hash, hashingDecode
 } from './implementations/hashing';
 
+import { enigmaEncode } from './implementations/enigma';
+
 export const methods = [
     // Classical
     {

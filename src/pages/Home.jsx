@@ -54,6 +54,13 @@ export default function Home() {
       active: true
     },
     {
+      title: 'ENIGMA CRACKER',
+      description: 'Simulate Alan Turing\\'s Bombe to brute-force Enigma messages.',
+      icon: <Cpu size={24} />,
+      path: '/enigma-cracker',
+      active: true
+    },
+    {
       title: 'RSA',
       description: 'COMING SOON',
       icon: <ShieldAlert size={24} />,

@@ -55,7 +55,7 @@ export default function Home() {
     },
     {
       title: 'ENIGMA CRACKER',
-      description: 'Simulate Alan Turing\\'s Bombe to brute-force Enigma messages.',
+      description: "Simulate Alan Turing's Bombe to brute-force Enigma messages.",
       icon: <Cpu size={24} />,
       path: '/enigma-cracker',
       active: true

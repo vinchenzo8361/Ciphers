@@ -93,6 +93,25 @@ export default function Library() {
             </li>
             <li>
               <a 
+                href="#enigma-concept" 
+                style={{ 
+                  display: 'block',
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '4px',
+                  backgroundColor: expandedMethod === 'enigma-concept' ? 'var(--accent-muted)' : 'transparent',
+                  color: expandedMethod === 'enigma-concept' ? 'var(--accent)' : 'var(--text-primary)', 
+                  fontSize: '0.85rem',
+                  fontWeight: expandedMethod === 'enigma-concept' ? '600' : '400',
+                  textDecoration: 'none',
+                  transition: 'all 0.15s ease'
+                }}
+                onClick={() => setExpandedMethod('enigma-concept')}
+              >
+                The Enigma Machine
+              </a>
+            </li>
+            <li>
+              <a 
                 href="#steg-concept" 
                 style={{ 
                   display: 'block',
@@ -229,7 +248,7 @@ export default function Library() {
               </div>
 
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It (As seen on <a href="https://www.youtube.com/watch?v=wXB-V_Keiu8" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Veritasium</a>)</strong><br/>
+                <strong style={{ color: 'var(--text-primary)' }}>The Math Behind It (As seen on <a href="https://youtu.be/PPJ6NJkmDAo?t=1030" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Veritasium</a>)</strong><br/>
                 To generate these keys, a computer picks two gigantic prime numbers (let's call them $P$ and $Q$) and multiplies them together to get a massive number $N$. It is mathematically easy to multiply them, but if you only have $N$, it would take supercomputers millions of years to figure out what $P$ and $Q$ were.<br/><br/>
                 <strong>A Step-by-Step Mathematical Example:</strong><br/>
                 Let's use very small primes to see how it works.<br/>
@@ -279,11 +298,12 @@ export default function Library() {
 
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
                 <strong style={{ color: 'var(--text-primary)' }}>How it Works</strong><br/>
-                The machine consists of a keyboard, a plugboard, 3 to 4 spinning rotors, and a reflector. Every time you press a letter, the first rotor clicks forward one position. This means that if you press 'A' three times, it might encrypt as 'X', then 'J', then 'L'. The circuit path changes for every single letter!<br/><br/>
+                The machine consists of a keyboard, a plugboard, 3 to 5 spinning rotors (you pick 3 to put in the machine), and a reflector. Every time you press a letter, the first rotor clicks forward one position. This means that if you press 'A' three times, it might encrypt as 'X', then 'J', then 'L'. The circuit path changes for every single letter!<br/><br/>
                 1. <strong>Plugboard:</strong> Swaps pairs of letters before they enter the rotors (e.g., A becomes F).<br/>
                 2. <strong>Rotors:</strong> The signal passes through the scrambled wiring of 3 rotors.<br/>
-                3. <strong>Reflector:</strong> The signal is bounced back entirely through the rotors and plugboard again.<br/>
-                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.
+                3. <strong>Reflector:</strong> The signal is bounced back entirely through the rotors and plugboard again.<br/><br/>
+                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.<br/><br/>
+                <a href="https://youtu.be/JsBZOcqZerk" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', fontWeight: 'bold' }}>Watch Jared Owen's stunning 3D animation of the Enigma Machine here.</a>
               </div>
             </div>
 

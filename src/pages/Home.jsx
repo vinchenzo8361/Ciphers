@@ -54,10 +54,10 @@ export default function Home() {
       active: true
     },
     {
-      title: 'ENIGMA CRACKER',
-      description: "Simulate Alan Turing's Bombe to brute-force Enigma messages.",
+      title: 'ENIGMA MACHINE',
+      description: 'Simulate the WWII cipher or use the Bombe to brute-force messages.',
       icon: <Cpu size={24} />,
-      path: '/enigma-cracker',
+      path: '/enigma-machine',
       active: true
     },
     {

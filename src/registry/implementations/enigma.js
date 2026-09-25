@@ -3,7 +3,9 @@ const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const ROTORS = {
     'I': { wiring: "EKMFLGDQVZNTOWYHXUSPAIBRCJ", notch: 'Q' },
     'II': { wiring: "AJDKSIRUXBLHWTMCQGZNPYFVOE", notch: 'E' },
-    'III': { wiring: "BDFHJLCPRTXVZNYEIWGAKMUSQO", notch: 'V' }
+    'III': { wiring: "BDFHJLCPRTXVZNYEIWGAKMUSQO", notch: 'V' },
+    'IV': { wiring: "ESOVPZJAYQUIRHXLNFTGKDCMWB", notch: 'J' },
+    'V': { wiring: "VZBRGITYUPSDNHLXAWMJQOFECK", notch: 'Z' }
 };
 
 const REFLECTOR_B = "YRUHQSLDPXNGOKMIEBFZCWVJAT";

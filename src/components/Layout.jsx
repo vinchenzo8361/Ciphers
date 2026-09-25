@@ -13,7 +13,7 @@ export default function Layout() {
     { name: 'Playground', path: '/playground' },
     { name: 'Library', path: '/library' },
     { name: 'Codebreaker', path: '/codebreaker' },
-    { name: 'Enigma Cracker', path: '/enigma-cracker' },
+    { name: 'Enigma Machine', path: '/enigma-machine' },
     { name: 'Password Creator', path: '/password-creator' }
   ];
 

@@ -27,7 +27,7 @@ export default function Library() {
         flexShrink: 0, 
         padding: '1.5rem', 
         backgroundColor: 'var(--bg-surface)', 
-        borderRadius: '8px', 
+        borderRadius: '0px', 
         border: '1px solid var(--border-subtle)',
         maxHeight: 'calc(100vh - 4rem)',
         overflowY: 'auto'
@@ -48,7 +48,7 @@ export default function Library() {
                     style={{ 
                       display: 'block',
                       padding: '0.4rem 0.75rem',
-                      borderRadius: '4px',
+                      borderRadius: '0px',
                       backgroundColor: expandedMethod === m.id ? 'var(--accent-muted)' : 'transparent',
                       color: expandedMethod === m.id ? 'var(--accent)' : 'var(--text-primary)', 
                       fontSize: '0.85rem',
@@ -78,7 +78,7 @@ export default function Library() {
                 style={{ 
                   display: 'block',
                   padding: '0.4rem 0.75rem',
-                  borderRadius: '4px',
+                  borderRadius: '0px',
                   backgroundColor: expandedMethod === 'rsa-concept' ? 'var(--accent-muted)' : 'transparent',
                   color: expandedMethod === 'rsa-concept' ? 'var(--accent)' : 'var(--text-primary)', 
                   fontSize: '0.85rem',
@@ -97,7 +97,7 @@ export default function Library() {
                 style={{ 
                   display: 'block',
                   padding: '0.4rem 0.75rem',
-                  borderRadius: '4px',
+                  borderRadius: '0px',
                   backgroundColor: expandedMethod === 'enigma-concept' ? 'var(--accent-muted)' : 'transparent',
                   color: expandedMethod === 'enigma-concept' ? 'var(--accent)' : 'var(--text-primary)', 
                   fontSize: '0.85rem',
@@ -116,7 +116,7 @@ export default function Library() {
                 style={{ 
                   display: 'block',
                   padding: '0.4rem 0.75rem',
-                  borderRadius: '4px',
+                  borderRadius: '0px',
                   backgroundColor: expandedMethod === 'steg-concept' ? 'var(--accent-muted)' : 'transparent',
                   color: expandedMethod === 'steg-concept' ? 'var(--accent)' : 'var(--text-primary)', 
                   fontSize: '0.85rem',
@@ -167,7 +167,7 @@ export default function Library() {
                     padding: '1.5rem',
                     backgroundColor: 'var(--bg-surface)',
                     border: '1px solid var(--border-subtle)',
-                    borderRadius: '6px'
+                    borderRadius: '0px'
                   }}>
                     <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>How it Works</h3>
                     <p style={{ lineHeight: 1.6, marginBottom: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
@@ -178,7 +178,7 @@ export default function Library() {
                       <div className="font-mono text-sm mb-6" style={{ 
                         backgroundColor: 'var(--bg-base)', 
                         padding: '1rem', 
-                        borderRadius: '4px',
+                        borderRadius: '0px',
                         borderLeft: '2px solid var(--accent)',
                         whiteSpace: 'pre-wrap',
                         color: 'var(--text-primary)'
@@ -270,7 +270,7 @@ export default function Library() {
               <div className="font-mono text-sm" style={{ 
                 backgroundColor: 'var(--bg-base)', 
                 padding: '1rem', 
-                borderRadius: '4px',
+                borderRadius: '0px',
                 borderLeft: '2px solid var(--accent)',
                 whiteSpace: 'pre-wrap',
                 color: 'var(--text-primary)',
@@ -293,6 +293,7 @@ export default function Library() {
               
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
                 <strong style={{ color: 'var(--text-primary)' }}>What is it?</strong><br/>
+                <a href="https://youtu.be/JsBZOcqZerk" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', fontWeight: 'bold', display: 'inline-block', marginBottom: '0.5rem' }}>Watch Jared Owen's stunning 3D animation of the Enigma Machine here.</a><br/>
                 The Enigma machine was an electromechanical encryption device used extensively by Nazi Germany during World War II. It is a highly complex polyalphabetic substitution cipher, famous because it was eventually cracked by Alan Turing and the team at Bletchley Park, significantly shortening the war.
               </div>
 
@@ -302,8 +303,7 @@ export default function Library() {
                 1. <strong>Plugboard:</strong> Swaps pairs of letters before they enter the rotors (e.g., A becomes F).<br/>
                 2. <strong>Rotors:</strong> The signal passes through the scrambled wiring of 3 rotors.<br/>
                 3. <strong>Reflector:</strong> The signal is bounced back entirely through the rotors and plugboard again.<br/><br/>
-                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.<br/><br/>
-                <a href="https://youtu.be/JsBZOcqZerk" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', fontWeight: 'bold' }}>Watch Jared Owen's stunning 3D animation of the Enigma Machine here.</a>
+                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.
               </div>
             </div>
 
@@ -334,7 +334,7 @@ export default function Library() {
               <div className="font-mono text-sm" style={{ 
                 backgroundColor: 'var(--bg-base)', 
                 padding: '1rem', 
-                borderRadius: '4px',
+                borderRadius: '0px',
                 borderLeft: '2px solid var(--accent)',
                 whiteSpace: 'pre-wrap',
                 color: 'var(--text-primary)',

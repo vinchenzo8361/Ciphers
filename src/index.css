@@ -2,18 +2,18 @@
 
 :root {
   /* Light Theme */
-  --bg-base: #f6f8fa;
+  --bg-base: #f0f0f0;
   --bg-surface: #ffffff;
-  --bg-surface-raised: #f3f4f6;
-  --border-subtle: #eaecef;
-  --border-strong: #d0d7de;
-  --text-primary: #1f2328;
-  --text-secondary: #656d76;
-  --accent: #0969da;
-  --accent-muted: rgba(9, 105, 218, 0.1);
-  --error: #cf222e;
-  --error-bg: rgba(207, 34, 46, 0.1);
-  --success: #1a7f37;
+  --bg-surface-raised: #e5e5e5;
+  --border-subtle: #d4d4d4;
+  --border-strong: #a3a3a3;
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --accent: #d97706;
+  --accent-muted: rgba(217, 119, 6, 0.1);
+  --error: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.1);
+  --success: #16a34a;
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
@@ -21,18 +21,18 @@
 
 [data-theme='dark'] {
   /* Dark Theme */
-  --bg-base: #1c212a;
-  --bg-surface: #262c36;
-  --bg-surface-raised: #343c4a;
-  --border-subtle: #454f5f;
-  --border-strong: #59667a;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --accent: #5e9cf9;
-  --accent-muted: rgba(94, 156, 249, 0.15);
-  --error: #ff7b72;
-  --error-bg: rgba(255, 123, 114, 0.1);
-  --success: #3fb950;
+  --bg-base: #050505;
+  --bg-surface: #111111;
+  --bg-surface-raised: #1a1a1a;
+  --border-subtle: #262626;
+  --border-strong: #404040;
+  --text-primary: #e5e5e5;
+  --text-secondary: #a3a3a3;
+  --accent: #eab308;
+  --accent-muted: rgba(234, 179, 8, 0.1);
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --success: #10b981;
 }
 
 * {
@@ -90,7 +90,7 @@ button:disabled {
 .panel {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 1.5rem;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
@@ -106,7 +106,7 @@ button:disabled {
   background-color: var(--bg-base);
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
-  border-radius: 4px;
+  border-radius: 0px;
   font-family: var(--font-mono);
   font-size: 0.9rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -136,7 +136,7 @@ button:disabled {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid transparent;
   font-size: 0.85rem;
   font-weight: 500;

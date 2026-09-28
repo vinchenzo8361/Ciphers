@@ -142,12 +142,18 @@ export default function EnigmaMachine() {
             }
             
             setCrackProgress(pIdx + 1);
-            // Yield to browser to update progress bar
+            
+            // Sort and update UI in real-time!
+            bestResults.sort((a, b) => b.score - a.score);
+            bestResults = bestResults.slice(0, 5); // Keep array small
+            if (bestResults.length > 0) {
+                setBombeResults([...bestResults]);
+            }
+
+            // Yield to browser to update progress bar and results
             await new Promise(resolve => setTimeout(resolve, 0));
         }
 
-        bestResults.sort((a, b) => b.score - a.score);
-        setBombeResults(bestResults.slice(0, 5));
         setIsCracking(false);
     };
 
@@ -319,8 +325,9 @@ export default function EnigmaMachine() {
                     <div className="panel" style={{ backgroundColor: 'var(--bg-base)' }}>
                         <h3 className="text-sm font-bold uppercase mb-2" style={{ color: 'var(--accent)' }}>Turing's Bombe Simulator</h3>
                         <p className="text-muted text-sm">
-                            The Bombe bypasses the need to know the specific rotors or starting positions. 
-                            It will instantly simulate all <strong>60</strong> historical rotor combinations and all <strong>17,576</strong> starting positions (1,054,560 total hardware configurations) to find English plaintext.
+                            The full Enigma has over <strong>158 Quintillion</strong> combinations (mostly from the plugboard). 
+                            However, Alan Turing's Bombe bypassed the plugboard to find the rotors first. 
+                            This simulator instantly tests all <strong>60</strong> historical rotor permutations and all <strong>17,576</strong> starting positions (1,054,560 core hardware configurations) and streams English plaintext matches in real-time.
                         </p>
                     </div>
 

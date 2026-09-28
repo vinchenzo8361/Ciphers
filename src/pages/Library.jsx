@@ -298,12 +298,29 @@ export default function Library() {
               </div>
 
               <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>How it Works</strong><br/>
-                The machine consists of a keyboard, a plugboard, 3 to 5 spinning rotors (you pick 3 to put in the machine), and a reflector. Every time you press a letter, the first rotor clicks forward one position. This means that if you press 'A' three times, it might encrypt as 'X', then 'J', then 'L'. The circuit path changes for every single letter!<br/><br/>
-                1. <strong>Plugboard:</strong> Swaps pairs of letters before they enter the rotors (e.g., A becomes F).<br/>
-                2. <strong>Rotors:</strong> The signal passes through the scrambled wiring of 3 rotors.<br/>
-                3. <strong>Reflector:</strong> The signal is bounced back entirely through the rotors and plugboard again.<br/><br/>
-                The reflector design ensured that encryption and decryption were identical: if you type the ciphertext into an identically configured Enigma, it spits out the plaintext. However, it also meant that <em>no letter could ever encrypt to itself</em>—a critical flaw that Turing exploited.
+                <strong style={{ color: 'var(--text-primary)' }}>How the Hardware Works</strong><br/>
+                Unlike classical ciphers that use a single math equation, the Enigma was a physical circuit board that rewired itself every time you typed a letter.<br/><br/>
+                1. <strong>The Steckerbrett (Plugboard):</strong> Before the electrical signal even enters the rotors, 10 cables physically swap pairs of letters (e.g., A becomes F, and F becomes A).<br/>
+                2. <strong>The Rotors (Walzen):</strong> The signal passes through the scrambled wiring of 3 chosen rotors (out of an available 5). Every time you press a letter, the first rotor clicks forward one position. If it completes a full revolution, the second rotor clicks forward (like an odometer).<br/>
+                3. <strong>The Reflector (Umkehrwalze):</strong> Once the signal reaches the end, a reflector bounces the electricity back entirely through the 3 rotors and the plugboard a second time!<br/><br/>
+                Because the rotors rotate with every keystroke, pressing 'A' three times might encrypt as 'X', then 'J', then 'L'. The entire electrical pathway changes for every single letter.
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>158 Quintillion Combinations</strong><br/>
+                To decrypt an Enigma message, you needed the exact daily settings the Germans were using. Let's break down the math:<br/>
+                • <strong>Rotor Order:</strong> Choosing 3 rotors out of 5 yields $5 \times 4 \times 3 = 60$ permutations.<br/>
+                • <strong>Starting Positions:</strong> Each of the 3 rotors has 26 starting letters (A-Z). $26 \times 26 \times 26 = 17,576$ combinations.<br/>
+                • <strong>Plugboard:</strong> Connecting 10 pairs of letters out of 26 creates an astronomical $150,738,274,937,250$ combinations.<br/><br/>
+                Multiply them all together, and the Enigma machine has exactly <strong>158,962,555,217,826,360,000</strong> possible configurations. A human could never guess the setting by hand.
+              </div>
+
+              <div className="text-muted" style={{ lineHeight: 1.6, fontSize: '0.95rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>The Fatal Flaw & Turing's Bombe</strong><br/>
+                The German engineers made a brilliant but fatal choice with the <em>Reflector</em>. The Reflector ensured that encryption and decryption were perfectly symmetrical: if you typed the ciphertext into an identically configured Enigma, it would spit out the plaintext.<br/><br/>
+                However, because electricity entered a pin on the reflector and had to leave through a <em>different</em> pin, <strong>no letter could ever encrypt to itself</strong>. An 'A' could become any letter in the alphabet, except 'A'.<br/><br/>
+                Alan Turing and the Bletchley Park team exploited this. They knew the Germans sent predictable daily weather reports. They would take a "Crib" (a guessed word like <code style={{color: 'var(--accent)'}}>WETTERBERICHT</code>) and slide it along the ciphertext. If any letter matched itself (e.g., an 'E' in the ciphertext lined up with an 'E' in the crib), they knew that alignment was impossible.<br/><br/>
+                Once they found a valid alignment, Turing's electromechanical "Bombe" machine was designed to ignore the 150 Trillion plugboard combinations entirely. It only brute-forced the core <strong>1,054,560</strong> rotor combinations to find the underlying circuit, breaking the "unbreakable" 158 Quintillion cipher in minutes.
               </div>
             </div>
 

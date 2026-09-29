@@ -51,36 +51,41 @@ export default function EnigmaMachine() {
     const [bombeResults, setBombeResults] = useState([]);
     const [isCracking, setIsCracking] = useState(false);
     const [crackProgress, setCrackProgress] = useState(0); // 0 to 60 (Rotor perms)
+    
+    // Cancellation token to stop background processing if user leaves page
+    const crackSessionRef = React.useRef(0);
 
     // Build the plugboard string for the engine
     const plugboardString = plugPairs.join(' ');
+
+    // Cleanup on unmount or tab switch
+    useEffect(() => {
+        return () => { crackSessionRef.current += 1; };
+    }, []);
 
     // Live Simulator Update
     useEffect(() => {
         if (activeTab === 'simulator') {
             const settings = { rotor1, rotor2, rotor3, start1, start2, start3, plugboard: plugboardString };
             setSimOutput(enigmaEncode(simInput, settings));
+            crackSessionRef.current += 1; // Stop bombe if active
+            setIsCracking(false);
         }
     }, [simInput, rotor1, rotor2, rotor3, start1, start2, start3, plugboardString, activeTab]);
 
+    // ... plugboard logic ...
     const handlePlugClick = (letter) => {
-        // Is it already part of a pair?
         const existingPairIndex = plugPairs.findIndex(p => p.includes(letter));
-        
         if (existingPairIndex !== -1) {
-            // Unplug it
             const newPairs = [...plugPairs];
             newPairs.splice(existingPairIndex, 1);
             setPlugPairs(newPairs);
             setActivePlug(null);
             return;
         }
-
         if (!activePlug) {
-            // First click
             setActivePlug(letter);
         } else {
-            // Second click - create pair
             if (activePlug !== letter) {
                 setPlugPairs([...plugPairs, activePlug + letter]);
             }
@@ -93,6 +98,9 @@ export default function EnigmaMachine() {
         setIsCracking(true);
         setBombeResults([]);
         setCrackProgress(0);
+        
+        crackSessionRef.current += 1;
+        const currentSession = crackSessionRef.current;
 
         await new Promise(r => setTimeout(r, 50));
 
@@ -111,6 +119,8 @@ export default function EnigmaMachine() {
 
         // Brute force 60 rotor combinations * 17576 starting positions = 1,054,560 attempts
         for (let pIdx = 0; pIdx < perms.length; pIdx++) {
+            if (crackSessionRef.current !== currentSession) return; // User left the page or switched tabs!
+
             const [r1, r2, r3] = perms[pIdx];
             
             for (let i = 0; i < 26; i++) {
@@ -145,7 +155,7 @@ export default function EnigmaMachine() {
             
             // Sort and update UI in real-time!
             bestResults.sort((a, b) => b.score - a.score);
-            bestResults = bestResults.slice(0, 5); // Keep array small
+            bestResults = bestResults.slice(0, 10); // Keep top 10 array small
             if (bestResults.length > 0) {
                 setBombeResults([...bestResults]);
             }
@@ -154,7 +164,9 @@ export default function EnigmaMachine() {
             await new Promise(resolve => setTimeout(resolve, 0));
         }
 
-        setIsCracking(false);
+        if (crackSessionRef.current === currentSession) {
+            setIsCracking(false);
+        }
     };
 
     const renderRotorSelect = (val, setter, label) => (
@@ -350,12 +362,15 @@ export default function EnigmaMachine() {
                             {isCracking && (
                                 <div className="flex flex-col gap-1 mt-2">
                                     <div className="flex justify-between text-xs font-mono text-muted">
-                                        <span>Testing Rotor Permutation {crackProgress}/60</span>
+                                        <span>Tested: {(crackProgress * 17576).toLocaleString()} / 1,054,560 combinations</span>
                                         <span>{Math.round((crackProgress / 60) * 100)}%</span>
                                     </div>
                                     <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--bg-surface)', borderRadius: '0px', overflow: 'hidden' }}>
                                         <div style={{ width: `${(crackProgress / 60) * 100}%`, height: '100%', backgroundColor: 'var(--accent)', transition: 'width 0.1s linear' }}></div>
                                     </div>
+                                    <span className="text-xs text-muted font-mono mt-1 text-right">
+                                        Remaining: {(1054560 - (crackProgress * 17576)).toLocaleString()}
+                                    </span>
                                 </div>
                             )}
                         </div>

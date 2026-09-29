@@ -48,6 +48,7 @@ export default function EnigmaMachine() {
 
     // Bombe State
     const [bombeInput, setBombeInput] = useState('');
+    const [bombeCrib, setBombeCrib] = useState('');
     const [bombeResults, setBombeResults] = useState([]);
     const [isCracking, setIsCracking] = useState(false);
     const [crackProgress, setCrackProgress] = useState(0); // 0 to 60 (Rotor perms)
@@ -117,6 +118,11 @@ export default function EnigmaMachine() {
             }
         } // 60 permutations
 
+        const useCrib = bombeCrib.trim().length > 0;
+        const cribClean = bombeCrib.trim().toUpperCase().replace(/[^A-Z]/g, '');
+        const cipherClean = bombeInput.toUpperCase().replace(/[^A-Z]/g, '');
+        const snippetToTest = useCrib ? cipherClean.substring(0, cribClean.length) : bombeInput;
+
         // Brute force 60 rotor combinations * 17576 starting positions = 1,054,560 attempts
         for (let pIdx = 0; pIdx < perms.length; pIdx++) {
             if (crackSessionRef.current !== currentSession) return; // User left the page or switched tabs!
@@ -136,14 +142,34 @@ export default function EnigmaMachine() {
                             plugboard: '' // Assume no plugboard for bombe brute force
                         };
 
-                        const decoded = enigmaEncode(bombeInput, settings);
-                        const score = scoreText(decoded);
+                        let score = 0;
+                        let decodedSnippet = '';
+
+                        if (useCrib) {
+                            decodedSnippet = enigmaEncode(snippetToTest, settings);
+                            let matches = 0;
+                            for (let m = 0; m < cribClean.length; m++) {
+                                if (decodedSnippet[m] === cribClean[m]) matches++;
+                            }
+                            score = matches * 50; // Heavily weight direct crib matches
+                            
+                            // If it's a very good crib match, also check full dictionary
+                            if (matches > cribClean.length * 0.2) {
+                                const fullDecoded = enigmaEncode(bombeInput, settings);
+                                score += scoreText(fullDecoded);
+                            }
+                        } else {
+                            const decoded = enigmaEncode(bombeInput, settings);
+                            score = scoreText(decoded);
+                        }
 
                         if (score > 0) {
+                            // Decode full string for the result display
+                            const finalOutput = enigmaEncode(bombeInput, settings);
                             bestResults.push({
                                 rotors: `${r1}-${r2}-${r3}`,
                                 starts: `${s1}-${s2}-${s3}`,
-                                output: decoded,
+                                output: finalOutput,
                                 score
                             });
                         }
@@ -352,6 +378,15 @@ export default function EnigmaMachine() {
                             onChange={(e) => setBombeInput(e.target.value)} 
                             placeholder="Paste intercepted Enigma text here... (Note: Extreme plugboard scrambling requires a 'Crib' to solve!)"
                             style={{ resize: 'vertical' }}
+                        />
+
+                        <label className="text-xs font-bold uppercase text-muted mt-2">KNOWN CRIB (Optional but required for messy plugboards)</label>
+                        <input
+                            type="text"
+                            className="input font-mono"
+                            value={bombeCrib}
+                            onChange={(e) => setBombeCrib(e.target.value)}
+                            placeholder="e.g. HELLO MY NAME IS (The Bombe will find rotors by matching unplugged letters)"
                         />
                         
                         <div className="mt-2 flex flex-col gap-2">

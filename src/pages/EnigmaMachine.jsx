@@ -380,14 +380,19 @@ export default function EnigmaMachine() {
                             style={{ resize: 'vertical' }}
                         />
 
-                        <label className="text-xs font-bold uppercase text-muted mt-2">KNOWN CRIB (Optional but required for messy plugboards)</label>
-                        <input
-                            type="text"
-                            className="input font-mono"
-                            value={bombeCrib}
-                            onChange={(e) => setBombeCrib(e.target.value)}
-                            placeholder="e.g. HELLO MY NAME IS (The Bombe will find rotors by matching unplugged letters)"
-                        />
+                        <div className="mt-2 flex flex-col gap-1">
+                            <label className="text-xs font-bold uppercase text-muted">KNOWN CRIB (Optional)</label>
+                            <p className="text-xs text-muted" style={{ lineHeight: 1.4, marginBottom: '0.25rem' }}>
+                                Alan Turing defeated the 150 Trillion plugboard combinations by guessing <strong>Cribs</strong>—phrases he was 100% sure were in the message (like 6AM weather reports). If your message has a messy plugboard, type a known Crib here (e.g. the first few words). The Bombe will use it to lock onto your rotors!
+                            </p>
+                            <input
+                                type="text"
+                                className="input font-mono"
+                                value={bombeCrib}
+                                onChange={(e) => setBombeCrib(e.target.value)}
+                                placeholder="e.g. HELLO MY NAME IS"
+                            />
+                        </div>
                         
                         <div className="mt-2 flex flex-col gap-2">
                             <button className="btn btn-primary" style={{ width: 'fit-content' }} onClick={handleCrack} disabled={!bombeInput.trim() || isCracking}>

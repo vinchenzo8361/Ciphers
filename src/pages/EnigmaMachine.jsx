@@ -344,32 +344,32 @@ export default function EnigmaMachine() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-xs font-bold uppercase text-muted">INTERCEPTED CIPHERTEXT (Plugboard assumed empty)</label>
+                        <label className="text-xs font-bold uppercase text-muted">INTERCEPTED CIPHERTEXT</label>
                         <textarea 
                             className="input font-mono" 
                             rows={5} 
                             value={bombeInput} 
                             onChange={(e) => setBombeInput(e.target.value)} 
-                            placeholder="Paste intercepted Enigma text here... (Longer text yields better dictionary matches)"
+                            placeholder="Paste intercepted Enigma text here... (Note: Extreme plugboard scrambling requires a 'Crib' to solve!)"
                             style={{ resize: 'vertical' }}
                         />
                         
                         <div className="mt-2 flex flex-col gap-2">
                             <button className="btn btn-primary" style={{ width: 'fit-content' }} onClick={handleCrack} disabled={!bombeInput.trim() || isCracking}>
-                                <Cpu size={16} /> {isCracking ? 'RUNNING BOMBE...' : 'START BRUTE FORCE (1,054,560 ATTEMPTS)'}
+                                <Cpu size={16} /> {isCracking ? 'RUNNING BOMBE...' : 'START BRUTE FORCE (158 QUINTILLION ATTEMPTS)'}
                             </button>
                             
                             {isCracking && (
                                 <div className="flex flex-col gap-1 mt-2">
                                     <div className="flex justify-between text-xs font-mono text-muted">
-                                        <span>Tested: {(crackProgress * 17576).toLocaleString()} / 1,054,560 combinations</span>
+                                        <span>Tested: {(BigInt(crackProgress * 17576) * 150738274937250n).toLocaleString()} / 158,962,555,217,826,360,000 combinations</span>
                                         <span>{Math.round((crackProgress / 60) * 100)}%</span>
                                     </div>
                                     <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--bg-surface)', borderRadius: '0px', overflow: 'hidden' }}>
                                         <div style={{ width: `${(crackProgress / 60) * 100}%`, height: '100%', backgroundColor: 'var(--accent)', transition: 'width 0.1s linear' }}></div>
                                     </div>
                                     <span className="text-xs text-muted font-mono mt-1 text-right">
-                                        Remaining: {(1054560 - (crackProgress * 17576)).toLocaleString()}
+                                        Remaining: {(158962555217826360000n - (BigInt(crackProgress * 17576) * 150738274937250n)).toLocaleString()}
                                     </span>
                                 </div>
                             )}
